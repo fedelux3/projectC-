@@ -1,6 +1,8 @@
 #ifndef GRAFO_H
 #define GRAFO_H
 
+#include <iterator> // std::forward_iterator_tag
+#include <cstddef>  // std::ptrdiff_t
 #include <iostream>
 
 template<typename T>
@@ -12,13 +14,12 @@ private:
     //dichiaro matrice di adiacenza
     bool **_archi;
 
-    //numero di nodi e archi
+    //numero di nodi
     unsigned int n_vert;
-    unsigned int n_archi;
     
 public:
 
-    grafo() : _vertici(0), _archi(0), n_vert(0), n_archi(0) {}
+    grafo() : _vertici(0), _archi(0), n_vert(0) {}
 
     //fare copy constructor
 
@@ -197,6 +198,100 @@ public:
     bool empty(){
         return n_vert == 0;
     }
+
+    //const_iterator
+    class const_iterator {
+		//uso il puntatore al array di identificatori per passare la struttura dati
+        const T* id; 
+
+	public:
+		typedef std::forward_iterator_tag iterator_category;
+		typedef T                         value_type;
+		typedef ptrdiff_t                 difference_type;
+		typedef const T*                  pointer; //a parte questi 2 const è identica a quella sopra
+		typedef const T&                  reference;
+
+	
+		const_iterator() : id(0){
+		}
+		
+		const_iterator(const const_iterator &other) : id(other.id){
+		}
+
+		const_iterator& operator=(const const_iterator &other) {
+			id = other.id;
+            return *this;
+		}
+
+		~const_iterator() {
+		}
+
+		// Ritorna il dato riferito dall'iteratore (dereferenziamento)
+		reference operator*() const {
+			return id->value;
+		}
+
+		// Ritorna il puntatore al dato riferito dall'iteratore
+		pointer operator->() const {
+			return &(id->value);
+		}
+		
+		// Operatore di iterazione post-incremento
+		const_iterator operator++(int) {
+			const_iterator tmp(*this);
+            id = id++; //sposto il puntatore alla posizione successiva ?????
+            return tmp;
+		}
+
+		// Operatore di iterazione pre-incremento
+		const_iterator& operator++() {
+			id = id++;
+            return *this;
+		}
+
+		// Uguaglianza
+		bool operator==(const const_iterator &other) const {
+			return (id == other.id);
+		}
+		
+		// Diversita'
+		bool operator!=(const const_iterator &other) const {
+			return (id != other.id);
+		}
+
+	private:
+		//Dati membro
+
+		// La classe container deve essere messa friend dell'iteratore per poter
+		// usare il costruttore di inizializzazione.
+		friend class grafo; 
+
+		// Costruttore privato di inizializzazione usato dalla classe container
+		// tipicamente nei metodi begin e end
+		const_iterator(const T* ident) : id(ident) { 
+			//???????????????
+		}
+		
+		// !!! Eventuali altri metodi privati
+		
+	}; // classe const_iterator
+
+    //Ritorna l'iteratore all'inizio della sequenza dati
+	const_iterator begin() const {
+		return const_iterator(_vertici);
+	}
+	
+	// Ritorna l'iteratore alla fine della sequenza dati
+	////////////////////////////////////////////
+    // FAI PROVE SE HA SENSO QUESTO END
+    /////////////////////////////////////////
+    const_iterator end() const {
+        if (n_vert != 0)
+		    return const_iterator(_vertici[n_vert-1]);
+        else
+            return const_iteretor(_vertici);
+	}
+
     void stampbool(bool** matr, int lung) {
         //std::cout << "stampo bool**" << std::endl;
         for (int i= 0; i < lung; ++i){

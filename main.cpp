@@ -123,12 +123,19 @@ void testTipi() {
     g.stampArchi();
 }
 
+void testIterator(){
+    typedef grafo<int> grafo_type;
+    grafo_type g;
+
+    g.insertNodo(4);
+}
+
 int main() {
 
     //testCreate();
     //testDelete();
-    testArchi();
-    //testTipi();
+    //testArchi();
+    testTipi();
 
     return 0;
 }
