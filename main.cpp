@@ -93,6 +93,7 @@ void testArchi() {
     g.stampArchi();
     std::cout << std::endl;
 
+
     g.deleteArco(51,2);
     g.deleteArco(2,83);
     g.deleteArco(2,2);
@@ -142,6 +143,10 @@ void testTipi() {
 
     std::cout << g2 << std::endl;
     g2.stampArchi();
+}
+
+void testVario() {
+
 }
 
 int main() {

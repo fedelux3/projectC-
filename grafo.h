@@ -83,19 +83,7 @@ public:
 
     //inserisco un arco che va da n1 a n2
     void insertArco(const T &n1, const T &n2){
-        ///////// ITERATORE
-        int idx1, idx2;
-        //cerco gli indici che corrispondono ai 2 nodi
-        idx1 = get_index(n1);
-        idx2 = get_index(n2);
         
-        // for(int i = 0; i < n_vert; ++i) {
-        //     if (_vertici[i] == n1)
-        //         idx1 = i;
-        //     if (_vertici[i] == n2)
-        //         idx2 = i;
-        // }
-        //se non esiste nodo
         if (!exists(n1) || !exists(n2)){
             std::cout << "nodo non esiste" << std::endl;
             return;
@@ -104,7 +92,12 @@ public:
         if (hasEdge(n1,n2)){
             std::cout << "L'arco esiste gia'" << std::endl;
         } else
-        {
+        {   
+            //cerco gli indici che corrispondono ai 2 nodi
+            int idx1, idx2;
+            idx1 = get_index(n1);
+            idx2 = get_index(n2);
+        
             _archi[idx1][idx2] = true;
             std::cout << "inserito" << std::endl;
 
@@ -118,17 +111,13 @@ public:
             return;
             //FAI L'ECCEZIONE
         }
-        int index_del = 0;
-        // for (int i=0; i < n_vert; ++i){
-        //     if (_vertici[i] == value){
-        //         index_del = i;
-        //     }
-        // }
+
         if (!exists(value)) {
             std::cout << "nodo non presente" << std::endl;
             return;
         }
 
+        int index_del = 0;
         index_del = get_index(value);
 
         //creo nuovo vettore di nodi e archi
@@ -169,27 +158,20 @@ public:
 
     //cancella l'arco che va da n1 a n2
     void deleteArco(const T &n1, const T &n2){
-        int idx1, idx2;
-
-        idx1 = get_index(n1);
-        idx2 = get_index(n2);
         
-        //cerco gli indici che corrispondono ai 2 nodi
-        // for(int i = 0; i < n_vert; ++i) {
-        //     if (_vertici[i] == n1)
-        //         idx1 = i;
-        //     if (_vertici[i] == n2)
-        //         idx2 = i;
-        // }
-        //se non esiste nodo
         if (!exists(n1) || !exists(n2)){
             std::cout << "nodo non esiste" << std::endl;
             return;
         }
+        int idx1, idx2;
+        idx1 = get_index(n1);
+        idx2 = get_index(n2);
+        
         //se non c'era nessun arco
         if (_archi[idx1][idx2] == false)
             std::cout << "Non c'e' nessun arco" << std::endl;
         else {
+        
             _archi[idx1][idx2] = false;
             std::cout << "eliminato" << std::endl;
         }
@@ -211,32 +193,25 @@ public:
         if (exists(val1) && exists(val2)) {
             //cerco gli indici che corrispondono ai 2 nodi
             int idx1, idx2;
-            
             idx1 = get_index(val1);
             idx2 = get_index(val2);
-        
-            // for(int i = 0; i < n_vert; ++i) {
-            //     if (_vertici[i] == val1)
-            //         idx1 = i;
-            //     if (_vertici[i] == val2)
-            //         idx2 = i;
-            // }
+
             return _archi[idx1][idx2];
         }
         return false;
     }
 
-    int get_nvert(){
-        return n_vert;
-    }
+    // int get_nvert(){
+    //     return n_vert;
+    // }
 
-    T get_nodo(int i){
-        return _vertici[i]; 
-    }
+    // T get_nodo(int i){
+    //     return _vertici[i]; 
+    // }
 
-    bool get_arco(int i, int j){
-        return _archi[i][j];
-    }
+    // bool get_arco(int i, int j){
+    //     return _archi[i][j];
+    // }
     
     //restituisce indice di un nodo
     int get_index(T value) {
@@ -370,13 +345,6 @@ public:
         std::cout << "MATRICE ADIACENZA:" << std::endl;
         stampbool(_archi, n_vert);   
     }
-
-   // void stampVertici() {
-     //   std::cout << "NODI:" << std::endl;
-      //  for (int i = 0; i < n_vert; ++i)
-        //    std::cout << _vertici[i] << " ";
-      //  std::cout << std::endl;
-   // }
 };
 
 template <typename T>
