@@ -1,6 +1,17 @@
 #include <iostream>
 #include "grafo.h"
 #include <string>
+#include <assert.h>
+
+//test iteratore
+template <typename T>
+void testIterator(const grafo<T> &graph){
+    typename grafo<T>::const_iterator i, ie;
+    
+    for (i=graph.begin(), ie =graph.end(); i!=ie; ++i) {
+        std::cout << *i <<std::endl;
+    }
+}
 
 void testCreate() {
     
@@ -11,11 +22,11 @@ void testCreate() {
     g.insertNodo(1);
     g.insertNodo(2);
     g.insertNodo(7);
-    g.insertNodo(8);
+    g.insertNodo(7);
     g.insertNodo(9);
     
     
-    g.stampVertici();
+    std::cout << g << std::endl;
     std::cout << "MATRICE" << std::endl;
     g.stampArchi();
     
@@ -31,32 +42,32 @@ void testDelete() {
     g.insertNodo(42);
 
     std::cout << "prima" << std::endl;
-    g.stampVertici();
+    std::cout << g << std::endl;
     g.stampArchi();
 
     g.deleteNodo(23);
 
     std::cout << "dopo" << std::endl;
-    g.stampVertici();
+    std::cout << g << std::endl;
     g.stampArchi();
 
     g.insertNodo(57);
 
     std::cout << "dopo2" << std::endl;
-    g.stampVertici();
+    std::cout << g << std::endl;
     g.stampArchi();
 
     g.deleteNodo(42);
     g.deleteNodo(42);
 
     std::cout << "dopo3" << std::endl;
-    g.stampVertici();
+    std::cout << g << std::endl;
     g.stampArchi();
 
     g.deleteNodo(57);
     
     std::cout << "dopo5" << std::endl;
-    g.stampVertici();
+    std::cout << g << std::endl;
     g.stampArchi();
 
     g.deleteNodo(42);
@@ -70,7 +81,7 @@ void testArchi() {
     g.insertNodo(2);
     g.insertNodo(51);
     g.insertNodo(83);
-    g.stampVertici();
+    std::cout << g << std::endl;
     g.stampArchi();
     std::cout << std::endl;
     
@@ -108,26 +119,25 @@ void testArchi() {
 void testTipi() {
     typedef grafo<std::string> grafo_type;
     grafo_type g;
-    std::string s = "ciao";
 
-    g.insertNodo(s);
-    g.insertNodo("prova");
-    g.insertNodo("ieila");
-    g.stampVertici();
+    g.insertNodo("primo");
+    g.insertNodo("secondo");
+    g.insertNodo("terzo");
+    g.insertArco("primo", "secondo");
+    g.insertArco("secondo", "secondo");
+    g.insertArco("terzo", "primo");
     g.stampArchi();
     std::cout << std::endl;
+
+
+    // std::cout << "test iteratore " << std::endl;
+    // testIterator(g);
+    // std::cout << "test stampa" << std::endl;
+    // std::cout << g << std::endl;
+
+    assert(g.exists("primo"));
+    assert(g.hasEdge("primo", "secondo"));
     
-    g.deleteNodo(s);
-    g.insertArco("prova","ieila");
-    g.insertArco("prova", "prova");
-    g.stampArchi();
-}
-
-void testIterator(){
-    typedef grafo<int> grafo_type;
-    grafo_type g;
-
-    g.insertNodo(4);
 }
 
 int main() {

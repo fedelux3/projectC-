@@ -24,20 +24,16 @@ public:
     //fare copy constructor
 
     void insertNodo(const T &value) {
-        bool same = false;
         //aggiungo in array nodo
         T* vert_aus = new T[n_vert+1];
 
-        //controllo se vi e gia un nodo uguale
+        //copio vecchio vettore in quello nuovo
         for(int i=0; i < n_vert; i++) {
-            if (value == _vertici[i]) {
-                same = true;
-            }
             vert_aus[i] = _vertici[i];
         }
 
         //aggiungo elemento in ultima posizione
-        if (!same) {
+        if (!exists(value)) {
             vert_aus[n_vert] = value;
 
             //aggiungo riga e colonna alla matrice di adiacenza
@@ -68,7 +64,8 @@ public:
 
     //inserisco un arco che va da n1 a n2
     void insertArco(const T &n1, const T &n2){
-        int idx1=-1, idx2 = -1;
+        ///////// ITERATORE
+        int idx1 = 0, idx2 = 0;
         //cerco gli indici che corrispondono ai 2 nodi
         for(int i = 0; i < n_vert; ++i) {
             if (_vertici[i] == n1)
@@ -77,12 +74,12 @@ public:
                 idx2 = i;
         }
         //se non esiste nodo
-        if (idx1 == -1 || idx2 == -1){
+        if (!exists(n1) || !exists(n2)){
             std::cout << "nodo non esiste" << std::endl;
             return;
         }
         //se l'arco esiste gia' lo dico
-        if (_archi[idx1][idx2]){
+        if (hasEdge(n1,n2)){
             std::cout << "L'arco esiste gia'" << std::endl;
         } else
         {
@@ -100,14 +97,12 @@ public:
             //FAI L'ECCEZIONE
         }
         int index_del = 0;
-        bool flag = false; //assumo che il nodo non ci sia
         for (int i=0; i < n_vert; ++i){
             if (_vertici[i] == value){
                 index_del = i;
-                flag = true;
             }
         }
-        if (!flag) {
+        if (!exists(value)) {
             std::cout << "nodo non presente" << std::endl;
             return;
         }
@@ -141,6 +136,7 @@ public:
             } //end if
         }//end for ext
         clear();
+
         _archi = matr;
         _vertici = vet_aus;
         n_vert--;
@@ -148,7 +144,7 @@ public:
 
     //cancella l'arco che va da n1 a n2
     void deleteArco(const T &n1, const T &n2){
-        int idx1=-1, idx2 = -1;
+        int idx1=0, idx2 = 0;
         //cerco gli indici che corrispondono ai 2 nodi
         for(int i = 0; i < n_vert; ++i) {
             if (_vertici[i] == n1)
@@ -157,17 +153,44 @@ public:
                 idx2 = i;
         }
         //se non esiste nodo
-        if (idx1 == -1 || idx2 == -1){
+        if (!exists(n1) || !exists(n2)){
             std::cout << "nodo non esiste" << std::endl;
             return;
         }
         //se non c'era nessun arco
         if (_archi[idx1][idx2] == false)
-            std::cout << "Non c'era nessun arco" << std::endl;
+            std::cout << "Non c'e' nessun arco" << std::endl;
         else {
             _archi[idx1][idx2] = false;
             std::cout << "eliminato" << std::endl;
         }
+    }
+
+    //esiste un nodo con questo valore
+    bool exists(T value) {
+        typename grafo<T>::const_iterator i, ie;
+    
+        for (i=this->begin(), ie =this->end(); i!=ie; ++i) {
+            if (*i == value)
+                return true;
+        }
+        return false;
+    }
+
+    //esiste arco da val1 a val2
+    bool hasEdge(T val1, T val2) {
+        if (exists(val1) && exists(val2)) {
+            //cerco gli indici che corrispondono ai 2 nodi
+            int idx1 = 0, idx2 = 0;
+            for(int i = 0; i < n_vert; ++i) {
+                if (_vertici[i] == val1)
+                    idx1 = i;
+                if (_vertici[i] == val2)
+                    idx2 = i;
+            }
+            return _archi[idx1][idx2];
+        }
+        return false;
     }
 
     int get_nvert(){
@@ -177,10 +200,11 @@ public:
     T get_nodo(int i){
         return _vertici[i]; 
     }
+
     bool get_arco(int i, int j){
         return _archi[i][j];
     }
-
+    
     ~grafo(){
         clear();
     }
@@ -202,7 +226,7 @@ public:
     //const_iterator
     class const_iterator {
 		//uso il puntatore al array di identificatori per passare la struttura dati
-        const T* id; 
+        //const T* id; 
 
 	public:
 		typedef std::forward_iterator_tag iterator_category;
@@ -212,14 +236,14 @@ public:
 		typedef const T&                  reference;
 
 	
-		const_iterator() : id(0){
+		const_iterator() : array(0) {
 		}
 		
-		const_iterator(const const_iterator &other) : id(other.id){
+		const_iterator(const const_iterator &other) : array(other.array) {
 		}
 
 		const_iterator& operator=(const const_iterator &other) {
-			id = other.id;
+			array = other.array;
             return *this;
 		}
 
@@ -228,48 +252,48 @@ public:
 
 		// Ritorna il dato riferito dall'iteratore (dereferenziamento)
 		reference operator*() const {
-			return id->value;
+			return *array;
 		}
 
 		// Ritorna il puntatore al dato riferito dall'iteratore
 		pointer operator->() const {
-			return &(id->value);
+			return array;
 		}
 		
 		// Operatore di iterazione post-incremento
 		const_iterator operator++(int) {
-			const_iterator tmp(*this);
-            id = id++; //sposto il puntatore alla posizione successiva ?????
+			const_iterator tmp(*this); //??????????????????????
+            array++; //sposto il puntatore alla posizione successiva 
             return tmp;
 		}
 
 		// Operatore di iterazione pre-incremento
 		const_iterator& operator++() {
-			id = id++;
+			++array;
             return *this;
 		}
 
 		// Uguaglianza
 		bool operator==(const const_iterator &other) const {
-			return (id == other.id);
+			return (array == other.array);
 		}
 		
 		// Diversita'
 		bool operator!=(const const_iterator &other) const {
-			return (id != other.id);
+			return (array != other.array);
 		}
 
 	private:
 		//Dati membro
-
+        const T* array;
 		// La classe container deve essere messa friend dell'iteratore per poter
 		// usare il costruttore di inizializzazione.
 		friend class grafo; 
 
 		// Costruttore privato di inizializzazione usato dalla classe container
 		// tipicamente nei metodi begin e end
-		const_iterator(const T* ident) : id(ident) { 
-			//???????????????
+		const_iterator(const T* ident) { 
+			array = ident;
 		}
 		
 		// !!! Eventuali altri metodi privati
@@ -282,14 +306,8 @@ public:
 	}
 	
 	// Ritorna l'iteratore alla fine della sequenza dati
-	////////////////////////////////////////////
-    // FAI PROVE SE HA SENSO QUESTO END
-    /////////////////////////////////////////
     const_iterator end() const {
-        if (n_vert != 0)
-		    return const_iterator(_vertici[n_vert-1]);
-        else
-            return const_iteretor(_vertici);
+	    return const_iterator(_vertici+n_vert);
 	}
 
     void stampbool(bool** matr, int lung) {
@@ -307,42 +325,24 @@ public:
         stampbool(_archi, n_vert);   
     }
 
-    void stampVertici() {
-        std::cout << "NODI:" << std::endl;
-        for (int i = 0; i < n_vert; ++i)
-            std::cout << _vertici[i] << " ";
-        std::cout << std::endl;
-    }
+   // void stampVertici() {
+     //   std::cout << "NODI:" << std::endl;
+      //  for (int i = 0; i < n_vert; ++i)
+        //    std::cout << _vertici[i] << " ";
+      //  std::cout << std::endl;
+   // }
 };
 
-// template<typename T>
-// void printNodi(grafo<T> g) {
-//     int n_nodi = g.get_nvert();
-//         std::cout << "Num nodi: " << n_nodi << std::endl;
-//         for(int i=0; i < n_nodi; i++) {
-//             std::cout << g.get_nodo(i) << ", ";           
-//         }
-//         std::cout << std::endl;
-//     }
+template <typename T>
+std::ostream &operator<<(std::ostream &os, const grafo<T> &graph) {
+    typename grafo<T>::const_iterator i, ie;
 
-// template<typename T>
-// void printArchi(grafo<T> g) {
-//     int n_nodi = g.get_nvert();
-//     std::cout << "Matrice adiacenza: " << std::endl;
-//     for(int i=0; i < n_nodi; i++) {
-//         for(int j =0; j < n_nodi; j++){
-//             //std::cout << "i,j: " << i << "," << j;
-//             std::cout << g.get_arco(i,j) << " ";
-//         }           
-//         std::cout << std::endl;
-//     }
-//     std::cout << std::endl;
-// }
+    for(i = graph.begin(), ie = graph.end(); i != ie; ++i) {
+        os << *i << " ";
+    }
+    os << std::endl;
 
-// template<typename T>
-// std::ostream &operator<<(std::ostream &os, const grafo<T> &gr) {
-    
-//     return os;
-// }
+    return os;
+}
 
 #endif
