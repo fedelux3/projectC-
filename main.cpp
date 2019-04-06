@@ -136,8 +136,12 @@ void testTipi() {
     // std::cout << g << std::endl;
 
     assert(g.exists("primo"));
-    assert(g.hasEdge("primo", "secondo"));
-    
+    assert(g.hasEdge("primo", "secondo"));  
+
+    grafo_type g2(g);
+
+    std::cout << g2 << std::endl;
+    g2.stampArchi();
 }
 
 int main() {

@@ -22,6 +22,25 @@ public:
     grafo() : _vertici(0), _archi(0), n_vert(0) {}
 
     //fare copy constructor
+    grafo(const grafo &other): _vertici(0), _archi(0), n_vert(0) {
+        T* tmp = other._vertici;
+        bool** matr = other._archi;
+        int tmp_vert = other.n_vert;
+
+        try {
+            for (int i = 0; i < tmp_vert; i++) {
+                insertNodo(tmp[i]);
+            }
+            for (int i = 0; i < n_vert; ++i) {
+                for (int j = 0; j < n_vert; ++j) {
+                    _archi[i][j] = matr[i][j];
+                }
+            }
+        } catch (...) {
+            clear();
+            std::cout << "error" << std::endl;
+        }
+    }
 
     void insertNodo(const T &value) {
         //aggiungo in array nodo
@@ -65,14 +84,17 @@ public:
     //inserisco un arco che va da n1 a n2
     void insertArco(const T &n1, const T &n2){
         ///////// ITERATORE
-        int idx1 = 0, idx2 = 0;
+        int idx1, idx2;
         //cerco gli indici che corrispondono ai 2 nodi
-        for(int i = 0; i < n_vert; ++i) {
-            if (_vertici[i] == n1)
-                idx1 = i;
-            if (_vertici[i] == n2)
-                idx2 = i;
-        }
+        idx1 = get_index(n1);
+        idx2 = get_index(n2);
+        
+        // for(int i = 0; i < n_vert; ++i) {
+        //     if (_vertici[i] == n1)
+        //         idx1 = i;
+        //     if (_vertici[i] == n2)
+        //         idx2 = i;
+        // }
         //se non esiste nodo
         if (!exists(n1) || !exists(n2)){
             std::cout << "nodo non esiste" << std::endl;
@@ -97,15 +119,18 @@ public:
             //FAI L'ECCEZIONE
         }
         int index_del = 0;
-        for (int i=0; i < n_vert; ++i){
-            if (_vertici[i] == value){
-                index_del = i;
-            }
-        }
+        // for (int i=0; i < n_vert; ++i){
+        //     if (_vertici[i] == value){
+        //         index_del = i;
+        //     }
+        // }
         if (!exists(value)) {
             std::cout << "nodo non presente" << std::endl;
             return;
         }
+
+        index_del = get_index(value);
+
         //creo nuovo vettore di nodi e archi
         T* vet_aus = new T[n_vert-1];
         bool **matr = new bool*[n_vert-1];
@@ -144,14 +169,18 @@ public:
 
     //cancella l'arco che va da n1 a n2
     void deleteArco(const T &n1, const T &n2){
-        int idx1=0, idx2 = 0;
+        int idx1, idx2;
+
+        idx1 = get_index(n1);
+        idx2 = get_index(n2);
+        
         //cerco gli indici che corrispondono ai 2 nodi
-        for(int i = 0; i < n_vert; ++i) {
-            if (_vertici[i] == n1)
-                idx1 = i;
-            if (_vertici[i] == n2)
-                idx2 = i;
-        }
+        // for(int i = 0; i < n_vert; ++i) {
+        //     if (_vertici[i] == n1)
+        //         idx1 = i;
+        //     if (_vertici[i] == n2)
+        //         idx2 = i;
+        // }
         //se non esiste nodo
         if (!exists(n1) || !exists(n2)){
             std::cout << "nodo non esiste" << std::endl;
@@ -181,13 +210,17 @@ public:
     bool hasEdge(T val1, T val2) {
         if (exists(val1) && exists(val2)) {
             //cerco gli indici che corrispondono ai 2 nodi
-            int idx1 = 0, idx2 = 0;
-            for(int i = 0; i < n_vert; ++i) {
-                if (_vertici[i] == val1)
-                    idx1 = i;
-                if (_vertici[i] == val2)
-                    idx2 = i;
-            }
+            int idx1, idx2;
+            
+            idx1 = get_index(val1);
+            idx2 = get_index(val2);
+        
+            // for(int i = 0; i < n_vert; ++i) {
+            //     if (_vertici[i] == val1)
+            //         idx1 = i;
+            //     if (_vertici[i] == val2)
+            //         idx2 = i;
+            // }
             return _archi[idx1][idx2];
         }
         return false;
@@ -205,6 +238,19 @@ public:
         return _archi[i][j];
     }
     
+    //restituisce indice di un nodo
+    int get_index(T value) {
+        typename grafo<T>::const_iterator i, ie;
+        int pos = 0;
+        i = this->begin();
+        ie = this->end();
+        while(*i != value || i == ie) {
+            pos++;
+            i++;
+        }
+        return pos;
+    }
+
     ~grafo(){
         clear();
     }
