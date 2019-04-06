@@ -21,7 +21,7 @@ public:
 
     grafo() : _vertici(0), _archi(0), n_vert(0) {}
 
-    //fare copy constructor
+    //copy constructor
     grafo(const grafo &other): _vertici(0), _archi(0), n_vert(0) {
         T* tmp = other._vertici;
         bool** matr = other._archi;
@@ -43,16 +43,16 @@ public:
     }
 
     void insertNodo(const T &value) {
-        //aggiungo in array nodo
-        T* vert_aus = new T[n_vert+1];
 
-        //copio vecchio vettore in quello nuovo
-        for(int i=0; i < n_vert; i++) {
-            vert_aus[i] = _vertici[i];
-        }
-
-        //aggiungo elemento in ultima posizione
+        //controllo se nodo esiste gia'
         if (!exists(value)) {
+            //aggiungo in array nodo
+            T* vert_aus = new T[n_vert+1];
+
+            //copio vecchio vettore in quello nuovo
+            for(int i=0; i < n_vert; i++) {
+                vert_aus[i] = _vertici[i];
+            }
             vert_aus[n_vert] = value;
 
             //aggiungo riga e colonna alla matrice di adiacenza
@@ -111,14 +111,12 @@ public:
             return;
             //FAI L'ECCEZIONE
         }
-
         if (!exists(value)) {
             std::cout << "nodo non presente" << std::endl;
             return;
         }
 
-        int index_del = 0;
-        index_del = get_index(value);
+        int index_del = get_index(value);
 
         //creo nuovo vettore di nodi e archi
         T* vet_aus = new T[n_vert-1];
@@ -149,8 +147,8 @@ public:
                 a=0;  
             } //end if
         }//end for ext
-        clear();
 
+        clear();
         _archi = matr;
         _vertici = vet_aus;
         n_vert--;
@@ -166,7 +164,7 @@ public:
         int idx1, idx2;
         idx1 = get_index(n1);
         idx2 = get_index(n2);
-        
+
         //se non c'era nessun arco
         if (_archi[idx1][idx2] == false)
             std::cout << "Non c'e' nessun arco" << std::endl;
@@ -201,17 +199,27 @@ public:
         return false;
     }
 
-    // int get_nvert(){
-    //     return n_vert;
-    // }
+    //restituisce numero vettori
+    int get_nvert() const{
+        return n_vert;
+    }
 
-    // T get_nodo(int i){
-    //     return _vertici[i]; 
-    // }
+    //restituisce numero archi
+    int get_narchi() const{
+        unsigned int narchi = 0;
+        for (int i = 0; i < n_vert; ++i) {
+            for (int j = 0; j < n_vert; ++j) {
+                if (_archi[i][j])
+                    narchi++;
+            }
+        } 
+        return narchi;
+    }
 
-    // bool get_arco(int i, int j){
-    //     return _archi[i][j];
-    // }
+    //restituisce arco dati indici
+    bool get_arco(int i, int j) const{
+        return _archi[i][j];
+    }
     
     //restituisce indice di un nodo
     int get_index(T value) {
@@ -226,10 +234,6 @@ public:
         return pos;
     }
 
-    ~grafo(){
-        clear();
-    }
-
     //elimino le strutture dei nodi e matr di adiacenza
     void clear(){
         delete[] _vertici;
@@ -237,6 +241,10 @@ public:
             delete[] _archi[i];
         }
         delete[] _archi;
+    }
+    
+    ~grafo(){
+        clear();
     }
 
     //stabilisce se il grafo e' vuoto
@@ -246,8 +254,6 @@ public:
 
     //const_iterator
     class const_iterator {
-		//uso il puntatore al array di identificatori per passare la struttura dati
-        //const T* id; 
 
 	public:
 		typedef std::forward_iterator_tag iterator_category;
@@ -283,7 +289,7 @@ public:
 		
 		// Operatore di iterazione post-incremento
 		const_iterator operator++(int) {
-			const_iterator tmp(*this); //??????????????????????
+			const_iterator tmp(*this); 
             array++; //sposto il puntatore alla posizione successiva 
             return tmp;
 		}
@@ -328,33 +334,29 @@ public:
 	
 	// Ritorna l'iteratore alla fine della sequenza dati
     const_iterator end() const {
-	    return const_iterator(_vertici+n_vert);
+	    return const_iterator(_vertici + n_vert);
 	}
-
-    void stampbool(bool** matr, int lung) {
-        //std::cout << "stampo bool**" << std::endl;
-        for (int i= 0; i < lung; ++i){
-            for (int j =0; j < lung; ++j) {
-                std::cout << matr[i][j] << " ";
-            }
-        std::cout << std::endl;
-        }
-    }
-
-    void stampArchi() {
-        std::cout << "MATRICE ADIACENZA:" << std::endl;
-        stampbool(_archi, n_vert);   
-    }
 };
 
 template <typename T>
 std::ostream &operator<<(std::ostream &os, const grafo<T> &graph) {
     typename grafo<T>::const_iterator i, ie;
 
+    os << "Nodi: ";
+
     for(i = graph.begin(), ie = graph.end(); i != ie; ++i) {
         os << *i << " ";
     }
     os << std::endl;
+
+    os << "Archi: " << std::endl;
+    
+    for (int i= 0; i < graph.get_nvert(); ++i){
+        for (int j =0; j < graph.get_nvert(); ++j) {
+            std::cout << graph.get_arco(i,j) << " ";
+        }
+    std::cout << std::endl;
+    }
 
     return os;
 }
