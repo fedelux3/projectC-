@@ -20,9 +20,18 @@ private:
 
 public:
 
+    /**
+     * Istanzia un set vuoto
+     * @short Costruttore di default
+     */
     grafo() : _vertici(0), _archi(0), n_vert(0) {}
 
-    //copy constructor
+    /**
+     * Istanzia un grafo con gli attributi di un altro grafo. Lancia l'eccezione
+     * bad_alloc se non vengono istanziate correttamente il vettore e la matrice 
+     * @short Copy constructor
+     * @param other grafo da inserire
+     */
     grafo(const grafo &other): _vertici(0), _archi(0), n_vert(0) {
         T* tmp = other._vertici;
         bool** matr = other._archi;
@@ -43,6 +52,12 @@ public:
         }
     }
 
+    /**
+     * Inserisce un nodo del valore passato in input, aggiornando il vettore dei nodi
+     * e la matrice degli archi, aggiungendovi una riga e una colonna
+     * @short inserisce un nodo
+     * @param value reference da aggiungere nel grafo
+     */
     void insertNodo(const T &value) {
 
         //controllo se nodo esiste gia'
@@ -86,13 +101,20 @@ public:
         }
     } //end insertNodo
 
-    //inserisco un arco che va da n1 a n2
+    /**
+     * Inserisco un arco che va da n1 a n2 modificando la matrice di adiacenza nelle
+     * coordinate dei due nodi. Lancia eccezione nodeNotFoundException se uno dei due nodi
+     * non e' presente nel grafo, lancia una edgeException se l'arco esiste gia'. 
+     * @short inserisco un arco
+     * @param n1 reference al nodo partenza
+     * @param n2 reference al nodo destinazione
+     */
     void insertArco(const T &n1, const T &n2){
         
         if (!exists(n1) || !exists(n2)){
             throw nodeNotFoundException("");
         }
-        //se l'arco esiste gia' lo dico
+        //se l'arco esiste gia'
         if (hasEdge(n1,n2)){
             throw edgeException("");
         } else
@@ -108,7 +130,12 @@ public:
         }
     }
 
-    //elimina un nodo che corrisponde a value
+    /**
+     * Elimina nodo che corrisponde al valore in input. Lancia una emptyException se il grafo
+     * risulta essere vuoto, lancia una nodeNotFoundException se non viene trovato il nodo considerato
+     * @short elimina nodo
+     * @param value reference da eliminare
+     */
     void deleteNodo(const T &value) {
         if (empty()) {
             throw emptyException("");
@@ -155,7 +182,14 @@ public:
         n_vert--;
     } //end deleteNodo
 
-    //cancella l'arco che va da n1 a n2
+    /**
+     * Elimina arco che va da n1 a n2. Lancia un eccezione nodeNotFoundException se uno dei
+     * due nodi non appartiene al grafo, lancia edgeNotFoundException se non viene trovato 
+     * l'arco richiesto
+     * @short elimina arco da n1 a n2
+     * @param n1 reference a nodo partenza
+     * @param n2 reference a nodo destinazione
+     */
     void deleteArco(const T &n1, const T &n2){
         
         if (!exists(n1) || !exists(n2)){
