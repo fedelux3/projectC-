@@ -22,7 +22,11 @@ void testCreate() {
     g.insertNodo(1);
     g.insertNodo(2);
     g.insertNodo(7);
+    try {
     g.insertNodo(7);
+    }
+    catch(nodeDuplicateException &e){}
+
     g.insertNodo(9);
     
     
@@ -44,7 +48,7 @@ void testDelete() {
 
     g.deleteNodo(23);
 
-    std::cout << "dopo" << std::endl;
+    std::cout << "dopo1" << std::endl;
     std::cout << g << std::endl;
 
     g.insertNodo(57);
@@ -53,7 +57,9 @@ void testDelete() {
     std::cout << g << std::endl;
 
     g.deleteNodo(42);
-    g.deleteNodo(42);
+    try{
+        g.deleteNodo(42);
+    } catch (nodeNotFoundException &e) {}
 
     std::cout << "dopo3" << std::endl;
     std::cout << g << std::endl;
@@ -62,8 +68,9 @@ void testDelete() {
     
     std::cout << "dopo5" << std::endl;
     std::cout << g << std::endl;
-
+    try{
     g.deleteNodo(42);
+    } catch (emptyException &e) {}
     // GESTIRE CASO DEL GRAFO VUOTO E DELETE SBAGLIATE
 }
 
@@ -79,13 +86,19 @@ void testArchi() {
     g.insertArco(51,2);
     g.insertArco(2,2);
     g.insertArco(2,51);
+    try{
     g.insertArco(51,2);
+    } catch (edgeException &e) {}
+    try {
     g.insertArco(3,5);
+    } catch (nodeNotFoundException &e){}
     std::cout << g << std::endl;
 
 
     g.deleteArco(51,2);
+    try {
     g.deleteArco(2,83);
+    } catch (edgeNotFoundException &e){}
     g.deleteArco(2,2);
     std::cout << g << std::endl;
 
@@ -152,14 +165,19 @@ void testVario() {
     g.insertArco(53,7.5);
     g.insertArco(7.5,4.3);
     g.insertArco(4.3,53);
+    try {
     g.insertArco(4.3,53); //gia` inserito
-    
+    } catch (edgeException &e) {}
+
     std::cout << g << std::endl;
 
+    try {
     g.deleteArco(7.5,7.5); //non esiste
+    } catch (edgeNotFoundException &e) {}
     g.deleteArco(53,4.3);
+    try {
     g.deleteArco(4.3,54); //non esiste nodo
-
+    } catch (nodeNotFoundException &e) {}
     std::cout << g << std::endl;
 
     //copy constructor

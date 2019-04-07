@@ -4,6 +4,7 @@
 #include <iterator> // std::forward_iterator_tag
 #include <cstddef>  // std::ptrdiff_t
 #include <iostream>
+#include "grafoexception.h"
 
 template<typename T>
 class grafo {
@@ -16,7 +17,7 @@ private:
 
     //numero di nodi
     unsigned int n_vert;
-    
+
 public:
 
     grafo() : _vertici(0), _archi(0), n_vert(0) {}
@@ -36,9 +37,9 @@ public:
                     _archi[i][j] = matr[i][j];
                 }
             }
-        } catch (...) {
+        } catch (std::bad_alloc &e) {
             clear();
-            std::cout << "error" << std::endl;
+            throw;
         }
     }
 
@@ -79,18 +80,21 @@ public:
             _archi = matr;
             n_vert = n_vert+1;  
         } //end if
+        else 
+        {
+            throw nodeDuplicateException("");
+        }
     } //end insertNodo
 
     //inserisco un arco che va da n1 a n2
     void insertArco(const T &n1, const T &n2){
         
         if (!exists(n1) || !exists(n2)){
-            std::cout << "nodo non esiste" << std::endl;
-            return;
+            throw nodeNotFoundException("");
         }
         //se l'arco esiste gia' lo dico
         if (hasEdge(n1,n2)){
-            std::cout << "L'arco esiste gia'" << std::endl;
+            throw edgeException("");
         } else
         {   
             //cerco gli indici che corrispondono ai 2 nodi
@@ -107,13 +111,10 @@ public:
     //elimina un nodo che corrisponde a value
     void deleteNodo(const T &value) {
         if (empty()) {
-            std::cout << "grafo vuoto" << std::endl;
-            return;
-            //FAI L'ECCEZIONE
+            throw emptyException("");
         }
         if (!exists(value)) {
-            std::cout << "nodo non presente" << std::endl;
-            return;
+            throw nodeNotFoundException("");
         }
 
         int index_del = get_index(value);
@@ -158,16 +159,15 @@ public:
     void deleteArco(const T &n1, const T &n2){
         
         if (!exists(n1) || !exists(n2)){
-            std::cout << "nodo non esiste" << std::endl;
-            return;
+            throw nodeNotFoundException("");
         }
         int idx1, idx2;
         idx1 = get_index(n1);
         idx2 = get_index(n2);
 
         //se non c'era nessun arco
-        if (_archi[idx1][idx2] == false)
-            std::cout << "Non c'e' nessun arco" << std::endl;
+        if (!hasEdge(n1,n2))
+            throw edgeNotFoundException("");
         else {
         
             _archi[idx1][idx2] = false;
@@ -217,12 +217,18 @@ public:
     }
 
     //restituisce arco dati indici
-    bool get_arco(int i, int j) const{
+    bool get_arco(unsigned int i, unsigned int j) const{
+        if (i >= n_vert || j >= n_vert){
+            throw edgeNotFoundException("index out of bounds");
+        }
         return _archi[i][j];
     }
     
     //restituisce indice di un nodo
     int get_index(T value) {
+        if (!exists(value)){
+            throw nodeNotFoundException("");
+        }
         typename grafo<T>::const_iterator i, ie;
         int pos = 0;
         i = this->begin();
@@ -351,8 +357,8 @@ std::ostream &operator<<(std::ostream &os, const grafo<T> &graph) {
 
     os << "Archi: " << std::endl;
     
-    for (int i= 0; i < graph.get_nvert(); ++i){
-        for (int j =0; j < graph.get_nvert(); ++j) {
+    for (unsigned int i= 0; i < graph.get_nvert(); ++i){
+        for (unsigned int j =0; j < graph.get_nvert(); ++j) {
             std::cout << graph.get_arco(i,j) << " ";
         }
     std::cout << std::endl;
