@@ -6,22 +6,23 @@
 #include <iostream>
 #include "grafoexception.h"
 
+/**
+ * Classe che definisce una struttura a grafo con nodi e archi. La tipologia di nodo e' template.
+ * @short Classe Grafo
+ */
 template<typename T>
 class grafo {
 
 private:
-    //dichiaro l'array di nodi
-    T *_vertici;
-    //dichiaro matrice di adiacenza
-    bool **_archi;
 
-    //numero di nodi
-    unsigned int n_vert;
+    T *_vertici; //array dei nodi
+    bool **_archi; //matrice di adiacenza
+    unsigned int n_vert; //numero dei nodi
 
 public:
 
     /**
-     * Istanzia un set vuoto
+     * Istanzia un grafo vuoto
      * @short Costruttore di default
      */
     grafo() : _vertici(0), _archi(0), n_vert(0) {}
@@ -125,8 +126,6 @@ public:
             idx2 = get_index(n2);
         
             _archi[idx1][idx2] = true;
-            std::cout << "inserito" << std::endl;
-
         }
     }
 
@@ -205,11 +204,16 @@ public:
         else {
         
             _archi[idx1][idx2] = false;
-            std::cout << "eliminato" << std::endl;
         }
     }
 
-    //esiste un nodo con questo valore
+    /**
+     * Valuta se esiste gia' un nodo con lo stesso valore di value. Restituisce un boolean
+     * @short Esiste il nodo
+     * @param value di tipo template
+     * @return true se il nodo esiste
+     * @return false se nodo non esiste
+     */
     bool exists(T value) {
         typename grafo<T>::const_iterator i, ie;
     
@@ -220,7 +224,15 @@ public:
         return false;
     }
 
-    //esiste arco da val1 a val2
+    /**
+     * Valuta se esiste gia' un arco tra il nodo di valore 'val1' e il nodo con valore 'val2'. Controllando
+     * prima se i nodi in questione esistono
+     * @short Esiste l'arco 
+     * @param val1 valore del nodo di partenza
+     * @param val2 valore del nodo di destinazione
+     * @return true se l'arco esiste
+     * @return false se l'arco non esiste
+     */
     bool hasEdge(T val1, T val2) {
         if (exists(val1) && exists(val2)) {
             //cerco gli indici che corrispondono ai 2 nodi
@@ -233,13 +245,21 @@ public:
         return false;
     }
 
-    //restituisce numero vettori
-    int get_nvert() const{
+    /**
+     * Restituisce il numero di nodi del grafo
+     * @short Numero nodi
+     * @return unsigned int del numero dei vertici
+     */ 
+    unsigned int get_nvert() const{
         return n_vert;
     }
 
-    //restituisce numero archi
-    int get_narchi() const{
+    /**
+     * Restituisce il numero di archi presente nel grafo
+     * @short Numero archi
+     * @return unsigned int del numero di archi
+     */
+    unsigned int get_narchi() const{
         unsigned int narchi = 0;
         for (int i = 0; i < n_vert; ++i) {
             for (int j = 0; j < n_vert; ++j) {
@@ -250,7 +270,16 @@ public:
         return narchi;
     }
 
-    //restituisce arco dati indici
+    /**
+     * Restituisce il valore dell'arco che si trova nella matice di adiacenza in
+     * posizione di indice i,j. Restituisce una edgeNotFoundException se gli indici non sono
+     * interni alla matrice
+     * @short Valore dell'arco
+     * @param i e' indice dell'arco di partenza
+     * @param j e' indice dell'arco di destinazione
+     * @return true se l'arco esiste
+     * @return false se l'arco non esistes
+     */ 
     bool get_arco(unsigned int i, unsigned int j) const{
         if (i >= n_vert || j >= n_vert){
             throw edgeNotFoundException("index out of bounds");
@@ -258,7 +287,13 @@ public:
         return _archi[i][j];
     }
     
-    //restituisce indice di un nodo
+    /**
+     * Restituisce l'indice del nodo che corrisponde al valore value. Lancia una nodeNotFoundException
+     * se il nodo cercato non esiste
+     * @short Indice del nodo
+     * @param value di tipo T da cercare nel grafo
+     * @return int che corrispondente all'indice del nodo
+     */
     int get_index(T value) {
         if (!exists(value)){
             throw nodeNotFoundException("");
@@ -274,7 +309,11 @@ public:
         return pos;
     }
 
-    //elimino le strutture dei nodi e matr di adiacenza
+    /**
+     * Elimina le strutture puntate dal grafo: array dei nodi, matrice di adiacenza. Utile quando
+     * si riaggionano i dati e quando si richiama il distruttore
+     * @short Elimina i dati del grafo
+     */
     void clear(){
         delete[] _vertici;
         for (int i=0; i < n_vert; ++i){
@@ -283,17 +322,26 @@ public:
         delete[] _archi;
     }
     
+    /**
+     * Richiama la funzione clear() per eliminare le strutture del grafo
+     * @short Distruttore
+     */
     ~grafo(){
         clear();
     }
 
-    //stabilisce se il grafo e' vuoto
+    /**
+     * Controlla se il grafo e' vuoto, ovvero se ha numero dei nodi pari a 0
+     * @short Grafo vuoto
+     * @return true se e' vuoto
+     * @return false se arco non e' vuoto
+     */
     bool empty(){
         return n_vert == 0;
     }
 
     //const_iterator
-    class const_iterator {
+class const_iterator {
 
 	public:
 		typedef std::forward_iterator_tag iterator_category;
@@ -329,9 +377,7 @@ public:
 		
 		// Operatore di iterazione post-incremento
 		const_iterator operator++(int) {
-			const_iterator tmp(*this); 
-            array++; //sposto il puntatore alla posizione successiva 
-            return tmp;
+			return const_iterator(array++);
 		}
 
 		// Operatore di iterazione pre-incremento
@@ -359,9 +405,7 @@ public:
 
 		// Costruttore privato di inizializzazione usato dalla classe container
 		// tipicamente nei metodi begin e end
-		const_iterator(const T* ident) { 
-			array = ident;
-		}
+		const_iterator(const T* ident) : array(ident) {}
 		
 		// !!! Eventuali altri metodi privati
 		
@@ -393,9 +437,9 @@ std::ostream &operator<<(std::ostream &os, const grafo<T> &graph) {
     
     for (unsigned int i= 0; i < graph.get_nvert(); ++i){
         for (unsigned int j =0; j < graph.get_nvert(); ++j) {
-            std::cout << graph.get_arco(i,j) << " ";
+            os << graph.get_arco(i,j) << " ";
         }
-    std::cout << std::endl;
+    os << std::endl;
     }
 
     return os;

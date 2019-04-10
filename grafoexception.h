@@ -4,39 +4,63 @@
 #include <stdexcept>
 #include <string>
 
+/**
+ * Classe che gestisce le eccezioni del grafo
+ * @short Eccezione grafo
+ */
 class grafoException : public std::runtime_error {
 public:
 
     grafoException(const std::string &message);
 };
 
+/**
+ * Classe che gestisce eccezione del grafo vuoto
+ * @short Eccezione grafo vuoto 
+ */
 class emptyException : public grafoException {
 public:
-    //se grafo risulta essere vuoto
+
     emptyException(const std::string &message);
 };
 
+/**
+ * Classe che gestisce eccezione del nodo non trovato nel grafo
+ * @short Eccezione nodo non trovato
+ */
 class nodeNotFoundException : public grafoException {
 public:
-    //se non viene trovato un certo nodo
+
     nodeNotFoundException(const std::string &message);
 };
 
+/**
+ * Classe che gestisce eccezione dell'inserimento di un nodo gia' presente nel grafo
+ * @short Eccezione nodo gia' presente
+ */
 class nodeDuplicateException : public grafoException {
 public:
-    //se un nodo che voglio inserire esiste gia' 
+
     nodeDuplicateException(const std::string &message);
 };
 
+/**
+ * Classe che gestisce eccezione del'inserimento di un arco gia' presente nel grafo
+ * @short Eccezione arco gia' presente
+ */
 class edgeException : public grafoException {
 public:
-    //se un arco e' gia' stato inserito
+
     edgeException(const std::string &message);
 };
 
+/**
+ * Classe che gestisce eccezione della ricerca/eliminazione di un arco che non esiste
+ * @short Eccezione arco che non c'e'
+ */
 class edgeNotFoundException : public grafoException {
 public:
-    //se un arco non viene trovato
+
     edgeNotFoundException(const std::string &message);
 };
 
