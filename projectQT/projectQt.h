@@ -25,6 +25,7 @@ private slots:
 
     void on_pushButtonSubmit_clicked();
 
+    void on_radioButtonMan_clicked();
 
 private:
     Ui::ProjectQt *ui;
@@ -32,15 +33,14 @@ private:
     //legge il csv
     void read();
     //inserisce nel csv
-    void insert();
+    void write();
     //parser per la data
     bool parserData(QString field);
     //parser per email
     bool parserEmail(QString field);
     //parser per num telefono
     bool parserPhone(QString field);
-    //stabilisce se e' una email o un numero di telefono
-    QString emailORphone(QString field);
+
 };
 
-#endif // MAINWINDOW_H
+#endif // PROJECTQT_H

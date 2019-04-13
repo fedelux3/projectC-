@@ -12,8 +12,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>460</width>
-    <height>360</height>
+    <width>582</width>
+    <height>471</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -30,8 +30,8 @@
   </property>
   <property name="maximumSize">
    <size>
-    <width>460</width>
-    <height>360</height>
+    <width>1234124</width>
+    <height>134134</height>
    </size>
   </property>
   <property name="palette">
@@ -572,14 +572,23 @@
            <property name="enabled">
             <bool>true</bool>
            </property>
+           <property name="inputMethodHints">
+            <set>Qt::ImhNone</set>
+           </property>
            <property name="inputMask">
             <string/>
            </property>
            <property name="text">
-            <string>Nome</string>
+            <string>nome</string>
            </property>
            <property name="frame">
-            <bool>true</bool>
+            <bool>false</bool>
+           </property>
+           <property name="dragEnabled">
+            <bool>false</bool>
+           </property>
+           <property name="clearButtonEnabled">
+            <bool>false</bool>
            </property>
           </widget>
          </item>
@@ -1094,46 +1103,118 @@
    <widget class="QWidget" name="horizontalLayoutWidget_2">
     <property name="geometry">
      <rect>
-      <x>10</x>
-      <y>190</y>
-      <width>441</width>
-      <height>80</height>
+      <x>30</x>
+      <y>210</y>
+      <width>211</width>
+      <height>51</height>
      </rect>
     </property>
     <layout class="QHBoxLayout" name="horizontalLayout_2">
      <item>
-      <widget class="QDateEdit" name="dateEdit">
-       <property name="displayFormat">
-        <string>dd/MM/yyyy</string>
+      <widget class="QSpinBox" name="spinBoxDay">
+       <property name="minimum">
+        <number>1</number>
        </property>
-       <property name="date">
-        <date>
-         <year>2019</year>
-         <month>4</month>
-         <day>10</day>
-        </date>
+       <property name="maximum">
+        <number>31</number>
+       </property>
+       <property name="displayIntegerBase">
+        <number>10</number>
        </property>
       </widget>
      </item>
      <item>
-      <layout class="QVBoxLayout" name="verticalLayout_2">
-       <item>
-        <widget class="QRadioButton" name="radioButtonMan">
-         <property name="text">
-          <string>Uomo</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QRadioButton" name="radioButtonWoman">
-         <property name="text">
-          <string>Donna</string>
-         </property>
-        </widget>
-       </item>
-      </layout>
+      <widget class="QSpinBox" name="spinBoxMonth">
+       <property name="minimum">
+        <number>1</number>
+       </property>
+       <property name="maximum">
+        <number>12</number>
+       </property>
+       <property name="value">
+        <number>4</number>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QSpinBox" name="spinBoxYear">
+       <property name="minimum">
+        <number>1900</number>
+       </property>
+       <property name="maximum">
+        <number>2099</number>
+       </property>
+       <property name="value">
+        <number>2019</number>
+       </property>
+      </widget>
      </item>
     </layout>
+   </widget>
+   <widget class="QDateEdit" name="dateEdit">
+    <property name="geometry">
+     <rect>
+      <x>140</x>
+      <y>300</y>
+      <width>143</width>
+      <height>26</height>
+     </rect>
+    </property>
+    <property name="displayFormat">
+     <string>dd/MM/yyyy</string>
+    </property>
+    <property name="date">
+     <date>
+      <year>2019</year>
+      <month>4</month>
+      <day>10</day>
+     </date>
+    </property>
+   </widget>
+   <widget class="QWidget" name="">
+    <property name="geometry">
+     <rect>
+      <x>290</x>
+      <y>190</y>
+      <width>161</width>
+      <height>78</height>
+     </rect>
+    </property>
+    <layout class="QVBoxLayout" name="verticalLayout_2">
+     <item>
+      <widget class="QRadioButton" name="radioButtonMan">
+       <property name="text">
+        <string>Uomo</string>
+       </property>
+       <property name="checkable">
+        <bool>true</bool>
+       </property>
+       <property name="checked">
+        <bool>false</bool>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QRadioButton" name="radioButtonWoman">
+       <property name="text">
+        <string>Donna</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+   <widget class="QLabel" name="label_4">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>200</y>
+      <width>121</width>
+      <height>17</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Data di nascita:</string>
+    </property>
    </widget>
   </widget>
   <widget class="QMenuBar" name="menuBar">
@@ -1141,7 +1222,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>460</width>
+     <width>582</width>
      <height>22</height>
     </rect>
    </property>
