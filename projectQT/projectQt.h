@@ -7,6 +7,7 @@
 #include <QFileDialog>
 #include <QMessageBox>
 #include <QTextStream>
+#include <QDate>
 
 namespace Ui {
 class ProjectQt;
@@ -24,8 +25,7 @@ private slots:
     void on_pushButtonAccess_clicked();
 
     void on_pushButtonSubmit_clicked();
-
-    void on_radioButtonMan_clicked();
+    void on_pushButtonRecovery_clicked();
 
 private:
     Ui::ProjectQt *ui;
@@ -34,6 +34,10 @@ private:
     void read();
     //inserisce nel csv
     void write();
+    //controlla se la mail/telefono di field esiste e controlla la password
+    void validUser(QString field, QString password);
+    //restituisce password corretta
+    void passwordRecovery(QString user);
     //parser per la data
     bool parserData(QString field);
     //parser per email

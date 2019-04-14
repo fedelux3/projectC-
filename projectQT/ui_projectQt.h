@@ -9,10 +9,8 @@
 #ifndef UI_PROJECTQT_H
 #define UI_PROJECTQT_H
 
-#include <QtCore/QDate>
 #include <QtCore/QVariant>
 #include <QtWidgets/QApplication>
-#include <QtWidgets/QDateEdit>
 #include <QtWidgets/QFrame>
 #include <QtWidgets/QGridLayout>
 #include <QtWidgets/QHBoxLayout>
@@ -38,31 +36,36 @@ public:
     QGridLayout *gridLayout_3;
     QHBoxLayout *horizontalLayout;
     QGridLayout *gridLayout_2;
-    QLabel *label_2;
     QLineEdit *lineEditEmail;
     QLineEdit *lineEditPassword;
     QLabel *label_3;
+    QLabel *label_2;
     QPushButton *pushButtonAccess;
-    QFrame *line;
+    QGridLayout *gridLayout;
     QLabel *label;
+    QPushButton *pushButtonRecovery;
     QVBoxLayout *verticalLayout;
     QGridLayout *gridLayout_4;
+    QLabel *label_5;
     QLineEdit *lineEditNewName;
     QLineEdit *lineEditNewSurname;
+    QLabel *label_6;
+    QLabel *label_8;
     QLineEdit *lineEditNewEmail;
+    QLabel *label_7;
     QLineEdit *lineEditNewPassword;
-    QPushButton *pushButtonSubmit;
-    QWidget *horizontalLayoutWidget_2;
+    QHBoxLayout *horizontalLayout_3;
+    QVBoxLayout *verticalLayout_3;
+    QLabel *label_4;
     QHBoxLayout *horizontalLayout_2;
     QSpinBox *spinBoxDay;
     QSpinBox *spinBoxMonth;
     QSpinBox *spinBoxYear;
-    QDateEdit *dateEdit;
-    QWidget *widget;
     QVBoxLayout *verticalLayout_2;
     QRadioButton *radioButtonMan;
     QRadioButton *radioButtonWoman;
-    QLabel *label_4;
+    QFrame *line;
+    QPushButton *pushButtonSubmit;
     QMenuBar *menuBar;
     QToolBar *mainToolBar;
     QStatusBar *statusBar;
@@ -73,13 +76,13 @@ public:
             ProjectQt->setObjectName(QString::fromUtf8("ProjectQt"));
         ProjectQt->setWindowModality(Qt::NonModal);
         ProjectQt->setEnabled(true);
-        ProjectQt->resize(582, 471);
+        ProjectQt->resize(487, 446);
         QSizePolicy sizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
         sizePolicy.setHorizontalStretch(0);
         sizePolicy.setVerticalStretch(0);
         sizePolicy.setHeightForWidth(ProjectQt->sizePolicy().hasHeightForWidth());
         ProjectQt->setSizePolicy(sizePolicy);
-        ProjectQt->setMinimumSize(QSize(460, 360));
+        ProjectQt->setMinimumSize(QSize(487, 446));
         ProjectQt->setMaximumSize(QSize(1234124, 134134));
         QPalette palette;
         QBrush brush(QColor(0, 0, 0, 255));
@@ -158,11 +161,12 @@ public:
         centralWidget->setObjectName(QString::fromUtf8("centralWidget"));
         gridLayoutWidget_2 = new QWidget(centralWidget);
         gridLayoutWidget_2->setObjectName(QString::fromUtf8("gridLayoutWidget_2"));
-        gridLayoutWidget_2->setGeometry(QRect(10, 10, 441, 182));
+        gridLayoutWidget_2->setGeometry(QRect(20, 10, 451, 360));
         gridLayout_3 = new QGridLayout(gridLayoutWidget_2);
         gridLayout_3->setSpacing(6);
         gridLayout_3->setContentsMargins(11, 11, 11, 11);
         gridLayout_3->setObjectName(QString::fromUtf8("gridLayout_3"));
+        gridLayout_3->setSizeConstraint(QLayout::SetFixedSize);
         gridLayout_3->setContentsMargins(0, 0, 0, 0);
         horizontalLayout = new QHBoxLayout();
         horizontalLayout->setSpacing(6);
@@ -170,11 +174,6 @@ public:
         gridLayout_2 = new QGridLayout();
         gridLayout_2->setSpacing(6);
         gridLayout_2->setObjectName(QString::fromUtf8("gridLayout_2"));
-        label_2 = new QLabel(gridLayoutWidget_2);
-        label_2->setObjectName(QString::fromUtf8("label_2"));
-
-        gridLayout_2->addWidget(label_2, 0, 0, 1, 1);
-
         lineEditEmail = new QLineEdit(gridLayoutWidget_2);
         lineEditEmail->setObjectName(QString::fromUtf8("lineEditEmail"));
 
@@ -182,6 +181,8 @@ public:
 
         lineEditPassword = new QLineEdit(gridLayoutWidget_2);
         lineEditPassword->setObjectName(QString::fromUtf8("lineEditPassword"));
+        lineEditPassword->setInputMethodHints(Qt::ImhHiddenText|Qt::ImhNoAutoUppercase|Qt::ImhNoPredictiveText|Qt::ImhSensitiveData);
+        lineEditPassword->setEchoMode(QLineEdit::Password);
 
         gridLayout_2->addWidget(lineEditPassword, 1, 1, 1, 1);
 
@@ -189,6 +190,11 @@ public:
         label_3->setObjectName(QString::fromUtf8("label_3"));
 
         gridLayout_2->addWidget(label_3, 0, 1, 1, 1);
+
+        label_2 = new QLabel(gridLayoutWidget_2);
+        label_2->setObjectName(QString::fromUtf8("label_2"));
+
+        gridLayout_2->addWidget(label_2, 0, 0, 1, 1);
 
 
         horizontalLayout->addLayout(gridLayout_2);
@@ -199,16 +205,11 @@ public:
         horizontalLayout->addWidget(pushButtonAccess);
 
 
-        gridLayout_3->addLayout(horizontalLayout, 0, 0, 1, 1);
+        gridLayout_3->addLayout(horizontalLayout, 0, 1, 1, 1);
 
-        line = new QFrame(gridLayoutWidget_2);
-        line->setObjectName(QString::fromUtf8("line"));
-        line->setLineWidth(3);
-        line->setFrameShape(QFrame::HLine);
-        line->setFrameShadow(QFrame::Sunken);
-
-        gridLayout_3->addWidget(line, 2, 0, 1, 1);
-
+        gridLayout = new QGridLayout();
+        gridLayout->setSpacing(6);
+        gridLayout->setObjectName(QString::fromUtf8("gridLayout"));
         label = new QLabel(gridLayoutWidget_2);
         label->setObjectName(QString::fromUtf8("label"));
         QSizePolicy sizePolicy1(QSizePolicy::Minimum, QSizePolicy::Minimum);
@@ -219,8 +220,17 @@ public:
         QFont font;
         font.setPointSize(10);
         label->setFont(font);
+        label->setTextFormat(Qt::AutoText);
 
-        gridLayout_3->addWidget(label, 1, 0, 1, 1);
+        gridLayout->addWidget(label, 0, 0, 1, 1);
+
+        pushButtonRecovery = new QPushButton(gridLayoutWidget_2);
+        pushButtonRecovery->setObjectName(QString::fromUtf8("pushButtonRecovery"));
+
+        gridLayout->addWidget(pushButtonRecovery, 0, 1, 1, 1);
+
+
+        gridLayout_3->addLayout(gridLayout, 1, 1, 1, 1);
 
         verticalLayout = new QVBoxLayout();
         verticalLayout->setSpacing(6);
@@ -228,44 +238,138 @@ public:
         gridLayout_4 = new QGridLayout();
         gridLayout_4->setSpacing(6);
         gridLayout_4->setObjectName(QString::fromUtf8("gridLayout_4"));
+        label_5 = new QLabel(gridLayoutWidget_2);
+        label_5->setObjectName(QString::fromUtf8("label_5"));
+
+        gridLayout_4->addWidget(label_5, 0, 0, 1, 1);
+
         lineEditNewName = new QLineEdit(gridLayoutWidget_2);
         lineEditNewName->setObjectName(QString::fromUtf8("lineEditNewName"));
         lineEditNewName->setEnabled(true);
+        lineEditNewName->setAutoFillBackground(false);
         lineEditNewName->setInputMethodHints(Qt::ImhNone);
         lineEditNewName->setFrame(false);
         lineEditNewName->setDragEnabled(false);
         lineEditNewName->setClearButtonEnabled(false);
 
-        gridLayout_4->addWidget(lineEditNewName, 0, 0, 1, 1);
+        gridLayout_4->addWidget(lineEditNewName, 1, 0, 1, 1);
 
         lineEditNewSurname = new QLineEdit(gridLayoutWidget_2);
         lineEditNewSurname->setObjectName(QString::fromUtf8("lineEditNewSurname"));
 
-        gridLayout_4->addWidget(lineEditNewSurname, 0, 1, 1, 1);
+        gridLayout_4->addWidget(lineEditNewSurname, 1, 1, 1, 1);
+
+        label_6 = new QLabel(gridLayoutWidget_2);
+        label_6->setObjectName(QString::fromUtf8("label_6"));
+
+        gridLayout_4->addWidget(label_6, 0, 1, 1, 1);
 
 
         verticalLayout->addLayout(gridLayout_4);
 
+        label_8 = new QLabel(gridLayoutWidget_2);
+        label_8->setObjectName(QString::fromUtf8("label_8"));
+
+        verticalLayout->addWidget(label_8);
+
         lineEditNewEmail = new QLineEdit(gridLayoutWidget_2);
         lineEditNewEmail->setObjectName(QString::fromUtf8("lineEditNewEmail"));
         lineEditNewEmail->setInputMask(QString::fromUtf8(""));
-        lineEditNewEmail->setText(QString::fromUtf8("Numero di cellulare o email"));
+        lineEditNewEmail->setText(QString::fromUtf8(""));
         lineEditNewEmail->setFrame(true);
         lineEditNewEmail->setEchoMode(QLineEdit::Normal);
 
         verticalLayout->addWidget(lineEditNewEmail);
 
+        label_7 = new QLabel(gridLayoutWidget_2);
+        label_7->setObjectName(QString::fromUtf8("label_7"));
+
+        verticalLayout->addWidget(label_7);
+
         lineEditNewPassword = new QLineEdit(gridLayoutWidget_2);
         lineEditNewPassword->setObjectName(QString::fromUtf8("lineEditNewPassword"));
+        lineEditNewPassword->setEchoMode(QLineEdit::PasswordEchoOnEdit);
 
         verticalLayout->addWidget(lineEditNewPassword);
 
+        horizontalLayout_3 = new QHBoxLayout();
+        horizontalLayout_3->setSpacing(6);
+        horizontalLayout_3->setObjectName(QString::fromUtf8("horizontalLayout_3"));
+        verticalLayout_3 = new QVBoxLayout();
+        verticalLayout_3->setSpacing(6);
+        verticalLayout_3->setObjectName(QString::fromUtf8("verticalLayout_3"));
+        label_4 = new QLabel(gridLayoutWidget_2);
+        label_4->setObjectName(QString::fromUtf8("label_4"));
 
-        gridLayout_3->addLayout(verticalLayout, 3, 0, 1, 1);
+        verticalLayout_3->addWidget(label_4);
 
-        pushButtonSubmit = new QPushButton(centralWidget);
+        horizontalLayout_2 = new QHBoxLayout();
+        horizontalLayout_2->setSpacing(6);
+        horizontalLayout_2->setObjectName(QString::fromUtf8("horizontalLayout_2"));
+        spinBoxDay = new QSpinBox(gridLayoutWidget_2);
+        spinBoxDay->setObjectName(QString::fromUtf8("spinBoxDay"));
+        spinBoxDay->setMinimum(1);
+        spinBoxDay->setMaximum(31);
+        spinBoxDay->setDisplayIntegerBase(10);
+
+        horizontalLayout_2->addWidget(spinBoxDay);
+
+        spinBoxMonth = new QSpinBox(gridLayoutWidget_2);
+        spinBoxMonth->setObjectName(QString::fromUtf8("spinBoxMonth"));
+        spinBoxMonth->setMinimum(1);
+        spinBoxMonth->setMaximum(12);
+        spinBoxMonth->setValue(4);
+
+        horizontalLayout_2->addWidget(spinBoxMonth);
+
+        spinBoxYear = new QSpinBox(gridLayoutWidget_2);
+        spinBoxYear->setObjectName(QString::fromUtf8("spinBoxYear"));
+        spinBoxYear->setMinimum(1900);
+        spinBoxYear->setMaximum(2099);
+        spinBoxYear->setValue(2019);
+
+        horizontalLayout_2->addWidget(spinBoxYear);
+
+
+        verticalLayout_3->addLayout(horizontalLayout_2);
+
+
+        horizontalLayout_3->addLayout(verticalLayout_3);
+
+        verticalLayout_2 = new QVBoxLayout();
+        verticalLayout_2->setSpacing(6);
+        verticalLayout_2->setObjectName(QString::fromUtf8("verticalLayout_2"));
+        radioButtonMan = new QRadioButton(gridLayoutWidget_2);
+        radioButtonMan->setObjectName(QString::fromUtf8("radioButtonMan"));
+        radioButtonMan->setCheckable(true);
+        radioButtonMan->setChecked(false);
+
+        verticalLayout_2->addWidget(radioButtonMan);
+
+        radioButtonWoman = new QRadioButton(gridLayoutWidget_2);
+        radioButtonWoman->setObjectName(QString::fromUtf8("radioButtonWoman"));
+
+        verticalLayout_2->addWidget(radioButtonWoman);
+
+
+        horizontalLayout_3->addLayout(verticalLayout_2);
+
+
+        verticalLayout->addLayout(horizontalLayout_3);
+
+
+        gridLayout_3->addLayout(verticalLayout, 3, 1, 1, 1);
+
+        line = new QFrame(gridLayoutWidget_2);
+        line->setObjectName(QString::fromUtf8("line"));
+        line->setLineWidth(3);
+        line->setFrameShape(QFrame::HLine);
+        line->setFrameShadow(QFrame::Sunken);
+
+        gridLayout_3->addWidget(line, 2, 1, 1, 1);
+
+        pushButtonSubmit = new QPushButton(gridLayoutWidget_2);
         pushButtonSubmit->setObjectName(QString::fromUtf8("pushButtonSubmit"));
-        pushButtonSubmit->setGeometry(QRect(60, 270, 321, 25));
         QPalette palette1;
         palette1.setBrush(QPalette::Active, QPalette::WindowText, brush);
         QBrush brush8(QColor(78, 154, 6, 255));
@@ -341,68 +445,13 @@ public:
         font1.setKerning(true);
         pushButtonSubmit->setFont(font1);
         pushButtonSubmit->setCheckable(false);
-        horizontalLayoutWidget_2 = new QWidget(centralWidget);
-        horizontalLayoutWidget_2->setObjectName(QString::fromUtf8("horizontalLayoutWidget_2"));
-        horizontalLayoutWidget_2->setGeometry(QRect(30, 210, 211, 51));
-        horizontalLayout_2 = new QHBoxLayout(horizontalLayoutWidget_2);
-        horizontalLayout_2->setSpacing(6);
-        horizontalLayout_2->setContentsMargins(11, 11, 11, 11);
-        horizontalLayout_2->setObjectName(QString::fromUtf8("horizontalLayout_2"));
-        horizontalLayout_2->setContentsMargins(0, 0, 0, 0);
-        spinBoxDay = new QSpinBox(horizontalLayoutWidget_2);
-        spinBoxDay->setObjectName(QString::fromUtf8("spinBoxDay"));
-        spinBoxDay->setMinimum(1);
-        spinBoxDay->setMaximum(31);
-        spinBoxDay->setDisplayIntegerBase(10);
 
-        horizontalLayout_2->addWidget(spinBoxDay);
+        gridLayout_3->addWidget(pushButtonSubmit, 4, 1, 1, 1);
 
-        spinBoxMonth = new QSpinBox(horizontalLayoutWidget_2);
-        spinBoxMonth->setObjectName(QString::fromUtf8("spinBoxMonth"));
-        spinBoxMonth->setMinimum(1);
-        spinBoxMonth->setMaximum(12);
-        spinBoxMonth->setValue(4);
-
-        horizontalLayout_2->addWidget(spinBoxMonth);
-
-        spinBoxYear = new QSpinBox(horizontalLayoutWidget_2);
-        spinBoxYear->setObjectName(QString::fromUtf8("spinBoxYear"));
-        spinBoxYear->setMinimum(1900);
-        spinBoxYear->setMaximum(2099);
-        spinBoxYear->setValue(2019);
-
-        horizontalLayout_2->addWidget(spinBoxYear);
-
-        dateEdit = new QDateEdit(centralWidget);
-        dateEdit->setObjectName(QString::fromUtf8("dateEdit"));
-        dateEdit->setGeometry(QRect(140, 300, 143, 26));
-        dateEdit->setDate(QDate(2019, 4, 10));
-        widget = new QWidget(centralWidget);
-        widget->setObjectName(QString::fromUtf8("widget"));
-        widget->setGeometry(QRect(290, 190, 161, 78));
-        verticalLayout_2 = new QVBoxLayout(widget);
-        verticalLayout_2->setSpacing(6);
-        verticalLayout_2->setContentsMargins(11, 11, 11, 11);
-        verticalLayout_2->setObjectName(QString::fromUtf8("verticalLayout_2"));
-        verticalLayout_2->setContentsMargins(0, 0, 0, 0);
-        radioButtonMan = new QRadioButton(widget);
-        radioButtonMan->setObjectName(QString::fromUtf8("radioButtonMan"));
-        radioButtonMan->setChecked(true);
-
-        verticalLayout_2->addWidget(radioButtonMan);
-
-        radioButtonWoman = new QRadioButton(widget);
-        radioButtonWoman->setObjectName(QString::fromUtf8("radioButtonWoman"));
-
-        verticalLayout_2->addWidget(radioButtonWoman);
-
-        label_4 = new QLabel(centralWidget);
-        label_4->setObjectName(QString::fromUtf8("label_4"));
-        label_4->setGeometry(QRect(20, 200, 121, 17));
         ProjectQt->setCentralWidget(centralWidget);
         menuBar = new QMenuBar(ProjectQt);
         menuBar->setObjectName(QString::fromUtf8("menuBar"));
-        menuBar->setGeometry(QRect(0, 0, 582, 22));
+        menuBar->setGeometry(QRect(0, 0, 487, 22));
         ProjectQt->setMenuBar(menuBar);
         mainToolBar = new QToolBar(ProjectQt);
         mainToolBar->setObjectName(QString::fromUtf8("mainToolBar"));
@@ -419,23 +468,27 @@ public:
     void retranslateUi(QMainWindow *ProjectQt)
     {
         ProjectQt->setWindowTitle(QApplication::translate("ProjectQt", "MainWindow", nullptr));
-        label_2->setText(QApplication::translate("ProjectQt", "E-mail o telefono", nullptr));
         lineEditEmail->setInputMask(QString());
         lineEditEmail->setText(QString());
         label_3->setText(QApplication::translate("ProjectQt", "Password", nullptr));
+        label_2->setText(QApplication::translate("ProjectQt", "E-mail o telefono", nullptr));
         pushButtonAccess->setText(QApplication::translate("ProjectQt", "Accedi", nullptr));
         label->setText(QApplication::translate("ProjectQt", "Non ricordi piu' come accedere all'account?", nullptr));
+        pushButtonRecovery->setText(QApplication::translate("ProjectQt", "Recupera password", nullptr));
+        label_5->setText(QApplication::translate("ProjectQt", "Nome:", nullptr));
         lineEditNewName->setInputMask(QString());
-        lineEditNewName->setText(QApplication::translate("ProjectQt", "nome", nullptr));
+        lineEditNewName->setText(QString());
         lineEditNewSurname->setInputMask(QString());
-        lineEditNewSurname->setText(QApplication::translate("ProjectQt", "Cognome", nullptr));
+        lineEditNewSurname->setText(QString());
+        label_6->setText(QApplication::translate("ProjectQt", "Cognome", nullptr));
+        label_8->setText(QApplication::translate("ProjectQt", "Email/numero di telefono", nullptr));
+        label_7->setText(QApplication::translate("ProjectQt", "Nuova Password:", nullptr));
         lineEditNewPassword->setInputMask(QString());
-        lineEditNewPassword->setText(QApplication::translate("ProjectQt", "Nuova Password", nullptr));
-        pushButtonSubmit->setText(QApplication::translate("ProjectQt", "Iscriviti", nullptr));
-        dateEdit->setDisplayFormat(QApplication::translate("ProjectQt", "dd/MM/yyyy", nullptr));
+        lineEditNewPassword->setText(QString());
+        label_4->setText(QApplication::translate("ProjectQt", "Data di nascita:", nullptr));
         radioButtonMan->setText(QApplication::translate("ProjectQt", "Uomo", nullptr));
         radioButtonWoman->setText(QApplication::translate("ProjectQt", "Donna", nullptr));
-        label_4->setText(QApplication::translate("ProjectQt", "Data di nascita:", nullptr));
+        pushButtonSubmit->setText(QApplication::translate("ProjectQt", "Iscriviti", nullptr));
     } // retranslateUi
 
 };

@@ -12,17 +12,27 @@ ProjectQt::~ProjectQt()
 {
     delete ui;
 }
-
+//CAPIRE COME AGGANCIARE LA SIZE DELLA FINESTRA!!!!!!!!!!!!!!!!!!
+//INSERIRE L'UTENTE ADMIN E PERMETTERGLI DI VEDERE TUTTI GLI UTENTI REGISTRATI!!!!!!!!!!!
 void ProjectQt::on_pushButtonAccess_clicked()
 {
-
+    QString user = ui->lineEditEmail->text();
+    QString password = ui->lineEditPassword->text();
+    this->validUser(user, password);
 }
 
 void ProjectQt::on_pushButtonSubmit_clicked()
 {
-//    bool b = parserData(QString("21/03/2019"));
-//    std::cout << b << std::endl;
-    this->write();
+    bool b = ui->lineEditNewEmail->isModified()
+            && ui->lineEditNewName->isModified()
+            && ui->lineEditNewSurname->isModified()
+            && ui->lineEditNewPassword->isModified();
+    if (b)
+        this->write();
+    else {
+        const QString mess = "inserisci tutti i dati";
+        QMessageBox::critical(this, tr("Data missing"), mess);
+    }
 }
 
 void ProjectQt::write()
@@ -41,7 +51,7 @@ void ProjectQt::write()
     //controllo la validita' dei dati inseriti
     if (!(parserEmail(field) || parserPhone(field)))
     {
-        const QString mess = field + " non valido.\nInserire una email o numero di telefono (10 cifre) validi!";
+        const QString mess = field + " non valido.\nInserire una email(<nome>@<dominio>.it) o numero di telefono (10 cifre) validi!";
         QMessageBox::critical(this, tr("Sintax error"), mess);
         return;
     }
@@ -52,7 +62,19 @@ void ProjectQt::write()
         QMessageBox::critical(this, tr("Sintax error"), mess);
         return;
     }
-    //CAPISCI COME GESTIRE I RADIO BUTTON (fare l'evento clicked?) !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1
+
+    QRadioButton *man = ui->radioButtonMan;
+    QRadioButton *woman = ui->radioButtonWoman;
+    if (!man->isChecked() && !woman->isChecked()) {
+        const QString mess = "Seleziona il sesso";
+        QMessageBox::critical(this, tr("Missing Field"), mess);
+        return;
+    }
+    if (man->isChecked())
+        gender = "M";
+    else {
+        gender = "F";
+    }
     //verifico che non vi sia gia' il nuovo utente
     QFile file("users.csv");
     if (!file.open(QIODevice::ReadOnly | QFile::Text)) {
@@ -70,18 +92,20 @@ void ProjectQt::write()
         {
             const QString mess = "Utente " + field + " e' gia' registrato!";
             QMessageBox::critical(this,tr("Unable to insert user"), mess);
+            file.close();
             return;
         }
         line = in.readLine();
     }
     //std::cout << "ok" << std::endl;
     file.close();
-    // VERIFICARE CHE I DATI IN INPUT SIANO COERENTI, IN PARTICOLARE EMAIL/NUMERO E DATA (cambiare widget?)
+
     //std::cout << "ok2" << std::endl;
     QFile fileOut("users.csv");
     if (!fileOut.open(QIODevice::Append | QFile::Text)) {
         QMessageBox::critical(this, tr("Unable to open file"),
                               file.errorString());
+        file.close();
         return;
     }//std::cout << "ok3" << std::endl;
     QTextStream out(&fileOut);
@@ -99,9 +123,9 @@ void ProjectQt::write()
     fileOut.close();
 }
 
+//DA ELIMINARE
 void ProjectQt::read()
 {
-    //QString filename = QFileDialog::getOpenFileName(this, tr("Open"));
     QFile file("users.csv");
     if (!file.open(QIODevice::ReadOnly | QFile::Text)) {
         QMessageBox::critical(this, tr("Unable to open file"),
@@ -119,13 +143,14 @@ void ProjectQt::read()
         //Qua posso fare i controlli per ogni pezzo della stringa
         //0.email/Phone, 1.password, 2.nome, 3.cognome, 4.data, 5.genere
         assert(list.size() == 6);
-        bool b = parserPhone(list[0]);
-        std::cout << b << std::endl;
+        //bool b = parserPhone(list[0]);
+        //std::cout << b << std::endl;
         line = in.readLine();
     }
     file.close();
 }
 
+//DA ELIMINARE
 //true se e' una data valida, false altrimenti format dd/mm/yyyy
 bool ProjectQt::parserData(QString field)
 {
@@ -166,15 +191,12 @@ bool ProjectQt::parserEmail(QString field)
             return false; //sono arrivato alla fine della stringa
     }
     //i++; //salto la @
-    while(field.at(i) != '.')
+    for (; i < field.size(); ++i)
     {
-        i++;
-        if (i >= field.size())
-            return false;
+        if (field.at(i) == '.' && i+2 == field.size()-1 )
+            if (field.at(i+1) == 'i' && field.at(i+2) == 't')
+                return true;
     }
-    i++; //salto il punto
-    if (field.size() > i+1)
-        return true;
     return false;
 }
 
@@ -195,7 +217,76 @@ bool ProjectQt::parserPhone(QString field)
     return true;
 }
 
-void ProjectQt::on_radioButtonMan_clicked()
+//verifica se l'utente inserito puo' accedere
+void ProjectQt::validUser(QString field, QString password)
 {
+    //QString filename = QFileDialog::getOpenFileName(this, tr("Open"));
+    QFile file("users.csv");
+    if (!file.open(QIODevice::ReadOnly | QFile::Text)) {
+        QMessageBox::critical(this, tr("Unable to open file"),
+                                  file.errorString());
+        return;
+    }
+    //questa parte mi permette di leggere riga per riga nel file
+    QTextStream in(&file);
+    QString line = in.readLine();
+    while (!line.isNull()) {
+        QStringList list = line.split(',');
+        //Qua posso fare i controlli per ogni pezzo della stringa
+        //0.email/Phone, 1.password, 2.nome, 3.cognome, 4.data, 5.genere
+        assert(list.size() == 6);
+        if (list[0] == field) {
+            if (list[1] == password) {
+                const QString mess = "Bentornato nel nostro sistema " + list[2] + " " + list[3] + "!";
+                QMessageBox::about(this, tr("Logged in"), mess);
+                return;
+            } else {
+                const QString mess = "Hai dimenticato la password? Clicca nella label della domanda.";
+                QMessageBox::critical(this, tr("Password not correct"), mess);
+                return;
+            }
+        }
+        line = in.readLine();
+    }
+    const QString mess = "Effettua la registazione";
+    QMessageBox::about(this, tr("User not found"), mess);
 
+    file.close();
+}
+
+void ProjectQt::passwordRecovery(QString user)
+{
+    //QString filename = QFileDialog::getOpenFileName(this, tr("Open"));
+    QFile file("users.csv");
+    if (!file.open(QIODevice::ReadOnly | QFile::Text)) {
+        QMessageBox::critical(this, tr("Unable to open file"),
+                                  file.errorString());
+        return;
+    }
+    //questa parte mi permette di leggere riga per riga nel file
+    QTextStream in(&file);
+    QString line = in.readLine();
+    while (!line.isNull()) {
+        QStringList list = line.split(',');
+        //Qua posso fare i controlli per ogni pezzo della stringa
+        //0.email/Phone, 1.password, 2.nome, 3.cognome, 4.data, 5.genere
+        assert(list.size() == 6);
+        if (list[0] == user) {
+            const QString mess = "user: " + user + " password: " + list[1];
+            QMessageBox::about(this, tr("Password found"), mess);
+            return;
+        }
+        line = in.readLine();
+    }
+    const QString mess = "controlla se email/telefono corretto";
+    QMessageBox::critical(this, tr("Username error"), mess);
+    return;
+}
+
+void ProjectQt::on_pushButtonRecovery_clicked()
+{
+    if (ui->lineEditEmail->isModified()){
+        QString user = ui->lineEditEmail->text();
+        this->passwordRecovery(user);
+    }
 }
