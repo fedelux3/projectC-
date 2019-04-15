@@ -6,6 +6,7 @@ ProjectQt::ProjectQt(QWidget *parent) :
     ui(new Ui::ProjectQt)
 {
     ui->setupUi(this);
+    this->setCentralWidget(ui->gridLayoutWidget_2);
 }
 
 ProjectQt::~ProjectQt()
@@ -18,6 +19,45 @@ void ProjectQt::on_pushButtonAccess_clicked()
 {
     QString user = ui->lineEditEmail->text();
     QString password = ui->lineEditPassword->text();
+    if (user == "admin@pas.com")
+    {
+        if (password == "admin")
+        {
+            QString stamp;
+            //stampo tutti gli utenti
+            QFile file("users.csv");
+            if (!file.open(QIODevice::ReadOnly | QFile::Text)) {
+                QMessageBox::critical(this, tr("Unable to open file"),
+                                          file.errorString());
+                return;
+            }
+
+            QTextStream in(&file);
+            QString line = in.readLine();
+            while (!line.isNull()) {
+                //std::cout << line.toUtf8().constData() << std::endl;
+                //devo suddividere la stringa in base al campo
+
+                QStringList list = line.split(',');
+                //Qua posso fare i controlli per ogni pezzo della stringa
+                //0.email/Phone, 1.password, 2.nome, 3.cognome, 4.data, 5.genere
+                for (int i = 0; i < 6; ++i)
+                {
+                    stamp += list[i] + "\t";
+                }
+                stamp += "\n";
+                line = in.readLine();
+            }
+            file.close();
+            QMessageBox::about(this, tr("Users"), stamp);
+            //std::cout << stamp.toUtf8().constData() << std::endl;
+            return;
+        } else {
+            const QString mess = "Password admin errata";
+            QMessageBox::critical(this, tr("Password error"), mess);
+            return;
+        }
+    }
     this->validUser(user, password);
 }
 
@@ -32,6 +72,14 @@ void ProjectQt::on_pushButtonSubmit_clicked()
     else {
         const QString mess = "inserisci tutti i dati";
         QMessageBox::critical(this, tr("Data missing"), mess);
+    }
+}
+
+void ProjectQt::on_pushButtonRecovery_clicked()
+{
+    if (ui->lineEditEmail->isModified()){
+        QString user = ui->lineEditEmail->text();
+        this->passwordRecovery(user);
     }
 }
 
@@ -281,12 +329,4 @@ void ProjectQt::passwordRecovery(QString user)
     const QString mess = "controlla se email/telefono corretto";
     QMessageBox::critical(this, tr("Username error"), mess);
     return;
-}
-
-void ProjectQt::on_pushButtonRecovery_clicked()
-{
-    if (ui->lineEditEmail->isModified()){
-        QString user = ui->lineEditEmail->text();
-        this->passwordRecovery(user);
-    }
 }
