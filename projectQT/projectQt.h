@@ -30,16 +30,12 @@ private slots:
 private:
     Ui::ProjectQt *ui;
 
-    //legge il csv
-    void read();
     //inserisce nel csv
     void write();
     //controlla se la mail/telefono di field esiste e controlla la password
     void validUser(QString field, QString password);
     //restituisce password corretta
     void passwordRecovery(QString user);
-    //parser per la data
-    bool parserData(QString field);
     //parser per email
     bool parserEmail(QString field);
     //parser per num telefono

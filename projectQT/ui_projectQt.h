@@ -17,12 +17,10 @@
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QLineEdit>
 #include <QtWidgets/QMainWindow>
-#include <QtWidgets/QMenuBar>
 #include <QtWidgets/QPushButton>
 #include <QtWidgets/QRadioButton>
 #include <QtWidgets/QSpinBox>
 #include <QtWidgets/QStatusBar>
-#include <QtWidgets/QToolBar>
 #include <QtWidgets/QVBoxLayout>
 #include <QtWidgets/QWidget>
 
@@ -66,8 +64,6 @@ public:
     QRadioButton *radioButtonWoman;
     QFrame *line;
     QPushButton *pushButtonSubmit;
-    QMenuBar *menuBar;
-    QToolBar *mainToolBar;
     QStatusBar *statusBar;
 
     void setupUi(QMainWindow *ProjectQt)
@@ -76,14 +72,14 @@ public:
             ProjectQt->setObjectName(QString::fromUtf8("ProjectQt"));
         ProjectQt->setWindowModality(Qt::NonModal);
         ProjectQt->setEnabled(true);
-        ProjectQt->resize(480, 420);
+        ProjectQt->resize(475, 408);
         QSizePolicy sizePolicy(QSizePolicy::Maximum, QSizePolicy::Maximum);
         sizePolicy.setHorizontalStretch(0);
         sizePolicy.setVerticalStretch(0);
         sizePolicy.setHeightForWidth(ProjectQt->sizePolicy().hasHeightForWidth());
         ProjectQt->setSizePolicy(sizePolicy);
         ProjectQt->setMinimumSize(QSize(467, 390));
-        ProjectQt->setMaximumSize(QSize(600, 430));
+        ProjectQt->setMaximumSize(QSize(600, 450));
         QPalette palette;
         QBrush brush(QColor(0, 0, 0, 255));
         brush.setStyle(Qt::SolidPattern);
@@ -180,7 +176,7 @@ public:
         gridLayout_2->setSizeConstraint(QLayout::SetDefaultConstraint);
         lineEditEmail = new QLineEdit(gridLayoutWidget_2);
         lineEditEmail->setObjectName(QString::fromUtf8("lineEditEmail"));
-        QSizePolicy sizePolicy1(QSizePolicy::Preferred, QSizePolicy::Fixed);
+        QSizePolicy sizePolicy1(QSizePolicy::Expanding, QSizePolicy::Fixed);
         sizePolicy1.setHorizontalStretch(0);
         sizePolicy1.setVerticalStretch(0);
         sizePolicy1.setHeightForWidth(lineEditEmail->sizePolicy().hasHeightForWidth());
@@ -212,8 +208,11 @@ public:
 
         pushButtonAccess = new QPushButton(gridLayoutWidget_2);
         pushButtonAccess->setObjectName(QString::fromUtf8("pushButtonAccess"));
-        sizePolicy1.setHeightForWidth(pushButtonAccess->sizePolicy().hasHeightForWidth());
-        pushButtonAccess->setSizePolicy(sizePolicy1);
+        QSizePolicy sizePolicy2(QSizePolicy::Preferred, QSizePolicy::Fixed);
+        sizePolicy2.setHorizontalStretch(0);
+        sizePolicy2.setVerticalStretch(0);
+        sizePolicy2.setHeightForWidth(pushButtonAccess->sizePolicy().hasHeightForWidth());
+        pushButtonAccess->setSizePolicy(sizePolicy2);
 
         horizontalLayout->addWidget(pushButtonAccess);
 
@@ -226,11 +225,11 @@ public:
         gridLayout->setSizeConstraint(QLayout::SetDefaultConstraint);
         label = new QLabel(gridLayoutWidget_2);
         label->setObjectName(QString::fromUtf8("label"));
-        QSizePolicy sizePolicy2(QSizePolicy::Preferred, QSizePolicy::Minimum);
-        sizePolicy2.setHorizontalStretch(0);
-        sizePolicy2.setVerticalStretch(0);
-        sizePolicy2.setHeightForWidth(label->sizePolicy().hasHeightForWidth());
-        label->setSizePolicy(sizePolicy2);
+        QSizePolicy sizePolicy3(QSizePolicy::Preferred, QSizePolicy::Minimum);
+        sizePolicy3.setHorizontalStretch(0);
+        sizePolicy3.setVerticalStretch(0);
+        sizePolicy3.setHeightForWidth(label->sizePolicy().hasHeightForWidth());
+        label->setSizePolicy(sizePolicy3);
         QFont font;
         font.setPointSize(10);
         label->setFont(font);
@@ -240,8 +239,8 @@ public:
 
         pushButtonRecovery = new QPushButton(gridLayoutWidget_2);
         pushButtonRecovery->setObjectName(QString::fromUtf8("pushButtonRecovery"));
-        sizePolicy1.setHeightForWidth(pushButtonRecovery->sizePolicy().hasHeightForWidth());
-        pushButtonRecovery->setSizePolicy(sizePolicy1);
+        sizePolicy2.setHeightForWidth(pushButtonRecovery->sizePolicy().hasHeightForWidth());
+        pushButtonRecovery->setSizePolicy(sizePolicy2);
 
         gridLayout->addWidget(pushButtonRecovery, 0, 1, 1, 1);
 
@@ -261,19 +260,19 @@ public:
         gridLayout_4->setContentsMargins(5, -1, 5, -1);
         label_5 = new QLabel(gridLayoutWidget_2);
         label_5->setObjectName(QString::fromUtf8("label_5"));
-        QSizePolicy sizePolicy3(QSizePolicy::Preferred, QSizePolicy::Preferred);
-        sizePolicy3.setHorizontalStretch(0);
-        sizePolicy3.setVerticalStretch(0);
-        sizePolicy3.setHeightForWidth(label_5->sizePolicy().hasHeightForWidth());
-        label_5->setSizePolicy(sizePolicy3);
+        QSizePolicy sizePolicy4(QSizePolicy::Preferred, QSizePolicy::Preferred);
+        sizePolicy4.setHorizontalStretch(0);
+        sizePolicy4.setVerticalStretch(0);
+        sizePolicy4.setHeightForWidth(label_5->sizePolicy().hasHeightForWidth());
+        label_5->setSizePolicy(sizePolicy4);
 
         gridLayout_4->addWidget(label_5, 0, 0, 1, 1);
 
         lineEditNewName = new QLineEdit(gridLayoutWidget_2);
         lineEditNewName->setObjectName(QString::fromUtf8("lineEditNewName"));
         lineEditNewName->setEnabled(true);
-        sizePolicy1.setHeightForWidth(lineEditNewName->sizePolicy().hasHeightForWidth());
-        lineEditNewName->setSizePolicy(sizePolicy1);
+        sizePolicy2.setHeightForWidth(lineEditNewName->sizePolicy().hasHeightForWidth());
+        lineEditNewName->setSizePolicy(sizePolicy2);
         lineEditNewName->setAutoFillBackground(false);
         lineEditNewName->setInputMethodHints(Qt::ImhNone);
         lineEditNewName->setFrame(false);
@@ -284,15 +283,15 @@ public:
 
         lineEditNewSurname = new QLineEdit(gridLayoutWidget_2);
         lineEditNewSurname->setObjectName(QString::fromUtf8("lineEditNewSurname"));
-        sizePolicy1.setHeightForWidth(lineEditNewSurname->sizePolicy().hasHeightForWidth());
-        lineEditNewSurname->setSizePolicy(sizePolicy1);
+        sizePolicy2.setHeightForWidth(lineEditNewSurname->sizePolicy().hasHeightForWidth());
+        lineEditNewSurname->setSizePolicy(sizePolicy2);
 
         gridLayout_4->addWidget(lineEditNewSurname, 1, 1, 1, 1);
 
         label_6 = new QLabel(gridLayoutWidget_2);
         label_6->setObjectName(QString::fromUtf8("label_6"));
-        sizePolicy3.setHeightForWidth(label_6->sizePolicy().hasHeightForWidth());
-        label_6->setSizePolicy(sizePolicy3);
+        sizePolicy4.setHeightForWidth(label_6->sizePolicy().hasHeightForWidth());
+        label_6->setSizePolicy(sizePolicy4);
 
         gridLayout_4->addWidget(label_6, 0, 1, 1, 1);
 
@@ -306,8 +305,8 @@ public:
 
         lineEditNewEmail = new QLineEdit(gridLayoutWidget_2);
         lineEditNewEmail->setObjectName(QString::fromUtf8("lineEditNewEmail"));
-        sizePolicy1.setHeightForWidth(lineEditNewEmail->sizePolicy().hasHeightForWidth());
-        lineEditNewEmail->setSizePolicy(sizePolicy1);
+        sizePolicy2.setHeightForWidth(lineEditNewEmail->sizePolicy().hasHeightForWidth());
+        lineEditNewEmail->setSizePolicy(sizePolicy2);
         lineEditNewEmail->setInputMask(QString::fromUtf8(""));
         lineEditNewEmail->setText(QString::fromUtf8(""));
         lineEditNewEmail->setFrame(true);
@@ -322,8 +321,8 @@ public:
 
         lineEditNewPassword = new QLineEdit(gridLayoutWidget_2);
         lineEditNewPassword->setObjectName(QString::fromUtf8("lineEditNewPassword"));
-        sizePolicy1.setHeightForWidth(lineEditNewPassword->sizePolicy().hasHeightForWidth());
-        lineEditNewPassword->setSizePolicy(sizePolicy1);
+        sizePolicy2.setHeightForWidth(lineEditNewPassword->sizePolicy().hasHeightForWidth());
+        lineEditNewPassword->setSizePolicy(sizePolicy2);
         lineEditNewPassword->setEchoMode(QLineEdit::PasswordEchoOnEdit);
 
         verticalLayout->addWidget(lineEditNewPassword);
@@ -345,8 +344,8 @@ public:
         horizontalLayout_2->setObjectName(QString::fromUtf8("horizontalLayout_2"));
         spinBoxDay = new QSpinBox(gridLayoutWidget_2);
         spinBoxDay->setObjectName(QString::fromUtf8("spinBoxDay"));
-        sizePolicy1.setHeightForWidth(spinBoxDay->sizePolicy().hasHeightForWidth());
-        spinBoxDay->setSizePolicy(sizePolicy1);
+        sizePolicy2.setHeightForWidth(spinBoxDay->sizePolicy().hasHeightForWidth());
+        spinBoxDay->setSizePolicy(sizePolicy2);
         spinBoxDay->setMinimum(1);
         spinBoxDay->setMaximum(31);
         spinBoxDay->setDisplayIntegerBase(10);
@@ -355,8 +354,8 @@ public:
 
         spinBoxMonth = new QSpinBox(gridLayoutWidget_2);
         spinBoxMonth->setObjectName(QString::fromUtf8("spinBoxMonth"));
-        sizePolicy1.setHeightForWidth(spinBoxMonth->sizePolicy().hasHeightForWidth());
-        spinBoxMonth->setSizePolicy(sizePolicy1);
+        sizePolicy2.setHeightForWidth(spinBoxMonth->sizePolicy().hasHeightForWidth());
+        spinBoxMonth->setSizePolicy(sizePolicy2);
         spinBoxMonth->setMinimum(1);
         spinBoxMonth->setMaximum(12);
         spinBoxMonth->setValue(4);
@@ -365,8 +364,8 @@ public:
 
         spinBoxYear = new QSpinBox(gridLayoutWidget_2);
         spinBoxYear->setObjectName(QString::fromUtf8("spinBoxYear"));
-        sizePolicy1.setHeightForWidth(spinBoxYear->sizePolicy().hasHeightForWidth());
-        spinBoxYear->setSizePolicy(sizePolicy1);
+        sizePolicy2.setHeightForWidth(spinBoxYear->sizePolicy().hasHeightForWidth());
+        spinBoxYear->setSizePolicy(sizePolicy2);
         spinBoxYear->setMinimum(1900);
         spinBoxYear->setMaximum(2099);
         spinBoxYear->setValue(2019);
@@ -385,8 +384,8 @@ public:
         verticalLayout_2->setContentsMargins(60, -1, -1, -1);
         radioButtonMan = new QRadioButton(gridLayoutWidget_2);
         radioButtonMan->setObjectName(QString::fromUtf8("radioButtonMan"));
-        sizePolicy1.setHeightForWidth(radioButtonMan->sizePolicy().hasHeightForWidth());
-        radioButtonMan->setSizePolicy(sizePolicy1);
+        sizePolicy2.setHeightForWidth(radioButtonMan->sizePolicy().hasHeightForWidth());
+        radioButtonMan->setSizePolicy(sizePolicy2);
         radioButtonMan->setCheckable(true);
         radioButtonMan->setChecked(false);
 
@@ -394,8 +393,8 @@ public:
 
         radioButtonWoman = new QRadioButton(gridLayoutWidget_2);
         radioButtonWoman->setObjectName(QString::fromUtf8("radioButtonWoman"));
-        sizePolicy1.setHeightForWidth(radioButtonWoman->sizePolicy().hasHeightForWidth());
-        radioButtonWoman->setSizePolicy(sizePolicy1);
+        sizePolicy2.setHeightForWidth(radioButtonWoman->sizePolicy().hasHeightForWidth());
+        radioButtonWoman->setSizePolicy(sizePolicy2);
 
         verticalLayout_2->addWidget(radioButtonWoman);
 
@@ -410,8 +409,8 @@ public:
 
         line = new QFrame(gridLayoutWidget_2);
         line->setObjectName(QString::fromUtf8("line"));
-        sizePolicy1.setHeightForWidth(line->sizePolicy().hasHeightForWidth());
-        line->setSizePolicy(sizePolicy1);
+        sizePolicy2.setHeightForWidth(line->sizePolicy().hasHeightForWidth());
+        line->setSizePolicy(sizePolicy2);
         line->setMinimumSize(QSize(400, 0));
         line->setLineWidth(3);
         line->setFrameShape(QFrame::HLine);
@@ -421,8 +420,8 @@ public:
 
         pushButtonSubmit = new QPushButton(gridLayoutWidget_2);
         pushButtonSubmit->setObjectName(QString::fromUtf8("pushButtonSubmit"));
-        sizePolicy1.setHeightForWidth(pushButtonSubmit->sizePolicy().hasHeightForWidth());
-        pushButtonSubmit->setSizePolicy(sizePolicy1);
+        sizePolicy2.setHeightForWidth(pushButtonSubmit->sizePolicy().hasHeightForWidth());
+        pushButtonSubmit->setSizePolicy(sizePolicy2);
         QPalette palette1;
         palette1.setBrush(QPalette::Active, QPalette::WindowText, brush);
         QBrush brush8(QColor(78, 154, 6, 255));
@@ -502,13 +501,6 @@ public:
         gridLayout_3->addWidget(pushButtonSubmit, 4, 1, 1, 1);
 
         ProjectQt->setCentralWidget(centralWidget);
-        menuBar = new QMenuBar(ProjectQt);
-        menuBar->setObjectName(QString::fromUtf8("menuBar"));
-        menuBar->setGeometry(QRect(0, 0, 480, 22));
-        ProjectQt->setMenuBar(menuBar);
-        mainToolBar = new QToolBar(ProjectQt);
-        mainToolBar->setObjectName(QString::fromUtf8("mainToolBar"));
-        ProjectQt->addToolBar(Qt::TopToolBarArea, mainToolBar);
         statusBar = new QStatusBar(ProjectQt);
         statusBar->setObjectName(QString::fromUtf8("statusBar"));
         ProjectQt->setStatusBar(statusBar);
@@ -520,7 +512,7 @@ public:
 
     void retranslateUi(QMainWindow *ProjectQt)
     {
-        ProjectQt->setWindowTitle(QApplication::translate("ProjectQt", "MainWindow", nullptr));
+        ProjectQt->setWindowTitle(QApplication::translate("ProjectQt", "Project Qt", nullptr));
         lineEditEmail->setInputMask(QString());
         lineEditEmail->setText(QString());
         label_3->setText(QApplication::translate("ProjectQt", "Password", nullptr));
