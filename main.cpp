@@ -3,6 +3,31 @@
 #include <string>
 #include <assert.h>
 
+//tipo custom point
+struct point {
+    int _x;
+    double _y;
+
+    point(): _x(0), _y(0) {}
+
+    point(int x, double y): _x(x), _y(y) {}
+
+    bool operator==(const point &other) const{
+        if (this->_x == other._x && this->_y == other._y)
+            return true;
+        else
+            return false;
+    }     
+};
+
+//stampa del point
+std::ostream &operator<<(std::ostream &os, const point &p) {
+
+    os << "x: " << p._x << ", y: " << p._y;
+
+    return os;
+}
+
 //test iteratore
 template <typename T>
 void testIterator(const grafo<T> &graph){
@@ -139,6 +164,8 @@ void testTipi() {
 
     grafo_type g2(g);
 
+    grafo_type g3 = g2;
+
     std::cout << g2 << std::endl;
 
     g2.insertArco("primo", "primo");
@@ -147,7 +174,8 @@ void testTipi() {
     std::cout << "g2:" << std::endl;
     std::cout << g2 << std::endl;
 
-
+    std::cout << "g3" << std::endl;
+    std::cout << g3 << std::endl;
 }
 
 void testVario() {
@@ -182,7 +210,7 @@ void testVario() {
 
     //copy constructor
     g_type g2(g);
-
+    g_type g3 = g;
     g2.insertNodo(23.43);
     g2.insertArco(7.5, 23.43);
     std::cout << "g" << std::endl;
@@ -190,15 +218,68 @@ void testVario() {
     
     std::cout << "g2" << std::endl;
     std::cout << g2 << std::endl;
+
+    g3.insertNodo(13.42);
+    g3.insertArco(13.42,4.3);
+    g3.insertArco(13.42,13.42);
+
+    std::cout << "g3" << std::endl;
+    std::cout << g3 << std::endl;
+}
+
+void testCustom() {
+    point p(5,3.4);
+    point p2(5,3.4);
+    std::cout << p << std::endl;
+    bool b;
+    b = p == p2;
+    std::cout<<b << std::endl;
+    
+    typedef grafo<point> grafo_type;
+    grafo_type g;
+
+    g.insertNodo(p);
+    try{
+        g.insertNodo(p2);
+    } catch (nodeDuplicateException &e) {
+        std::cout << "duplicate exception" << std::endl;
+    }
+    g.insertNodo(point(6,8));
+    g.insertNodo(point(2,12.2));
+    
+    g.insertArco(p,point(6,8));
+    g.insertArco(point(6,8),p);
+    g.insertArco(point(2,12.2),point(2,12.2));
+    std::cout << g << std::endl;
+
+    g.deleteArco(p,point(6,8));
+    g.deleteNodo(point(2,12.2));
+    std::cout << g << std::endl;
+
+    grafo_type g2(g);
+
+    point p3(3,7.2);
+    g2.insertNodo(p3);
+    g2.insertArco(p, p3);
+    g2.insertArco(p3, p3);
+    
+    std::cout << "g\n" << g << std::endl;
+    std::cout << "g2\n" << g2 << std::endl;
 }
 
 int main() {
 
-    // testCreate();
-    // testDelete();
-    // testArchi();
-    // testTipi();
+    std::cout<< " - - - Test Create - - - \n" << std::endl;
+    testCreate();
+    std::cout<< " - - - Test Delete - - - \n" << std::endl;
+    testDelete();
+    std::cout<< " - - - Test Archi - - - \n" << std::endl;
+    testArchi();
+    std::cout<< " - - - Test Tipi - - - \n" << std::endl;
+    testTipi();
+    std::cout<< " - - - Test Vario - - - \n" << std::endl;
     testVario();
-
+    std::cout<< " - - - Test Custom - - - \n" << std::endl;
+    testCustom();
     return 0;
 }

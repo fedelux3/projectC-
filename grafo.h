@@ -18,7 +18,41 @@ private:
     T *_vertici; //array dei nodi
     bool **_archi; //matrice di adiacenza
     unsigned int n_vert; //numero dei nodi
+    
+    /**
+     * Elimina le strutture puntate dal grafo: array dei nodi, matrice di adiacenza. Utile quando
+     * si riaggionano i dati e quando si richiama il distruttore
+     * @short Elimina i dati del grafo
+     */
+    void clear(){
+        delete[] _vertici;
+        for (int i=0; i < n_vert; ++i){
+            delete[] _archi[i];
+        }
+        delete[] _archi;
+    }
 
+    /**
+     * Restituisce l'indice del nodo che corrisponde al valore value. Lancia una nodeNotFoundException
+     * se il nodo cercato non esiste
+     * @short Indice del nodo
+     * @param value di tipo T da cercare nel grafo
+     * @return int che corrispondente all'indice del nodo
+     */
+    int get_index(const T value) const{
+        if (!exists(value)){
+            throw nodeNotFoundException("");
+        }
+        typename grafo<T>::const_iterator i, ie;
+        int pos = 0;
+        i = this->begin();
+        ie = this->end();
+        while(!(*i == value) || i == ie) {
+            pos++;
+            i++;
+        }
+        return pos;
+    }
 public:
 
     /**
@@ -53,6 +87,22 @@ public:
         }
     }
 
+    /**
+    * Ridefinisco l'operatore di assegnamento che sovrascrive il grafo this con i dati 
+    * copiati dal grafo in input
+    * @short Operatore di assegnamento 
+    * @param other grafo n input
+    * @return reference a this
+    */
+    grafo& operator=(const grafo &other){
+        if(&other != this){
+            grafo tmp(other);
+            std::swap(tmp._vertici, _vertici);
+            std::swap(tmp._archi, _archi);
+            std::swap(tmp.n_vert, n_vert);
+        }
+        return *this;
+    }
     /**
      * Inserisce un nodo del valore passato in input, aggiornando il vettore dei nodi
      * e la matrice degli archi, aggiungendovi una riga e una colonna
@@ -198,13 +248,10 @@ public:
         idx1 = get_index(n1);
         idx2 = get_index(n2);
 
-        //se non c'era nessun arco
-        if (!hasEdge(n1,n2))
-            throw edgeNotFoundException("");
-        else {
-        
+        //se c'era l'arco
+        if (hasEdge(n1,n2))
             _archi[idx1][idx2] = false;
-        }
+        
     }
 
     /**
@@ -214,7 +261,7 @@ public:
      * @return true se il nodo esiste
      * @return false se nodo non esiste
      */
-    bool exists(T value) {
+    bool exists(const T value) const{
         typename grafo<T>::const_iterator i, ie;
     
         for (i=this->begin(), ie =this->end(); i!=ie; ++i) {
@@ -233,7 +280,7 @@ public:
      * @return true se l'arco esiste
      * @return false se l'arco non esiste
      */
-    bool hasEdge(T val1, T val2) {
+    bool hasEdge(const T val1, const T val2) {
         if (exists(val1) && exists(val2)) {
             //cerco gli indici che corrispondono ai 2 nodi
             int idx1, idx2;
@@ -288,41 +335,6 @@ public:
     }
     
     /**
-     * Restituisce l'indice del nodo che corrisponde al valore value. Lancia una nodeNotFoundException
-     * se il nodo cercato non esiste
-     * @short Indice del nodo
-     * @param value di tipo T da cercare nel grafo
-     * @return int che corrispondente all'indice del nodo
-     */
-    int get_index(T value) {
-        if (!exists(value)){
-            throw nodeNotFoundException("");
-        }
-        typename grafo<T>::const_iterator i, ie;
-        int pos = 0;
-        i = this->begin();
-        ie = this->end();
-        while(*i != value || i == ie) {
-            pos++;
-            i++;
-        }
-        return pos;
-    }
-
-    /**
-     * Elimina le strutture puntate dal grafo: array dei nodi, matrice di adiacenza. Utile quando
-     * si riaggionano i dati e quando si richiama il distruttore
-     * @short Elimina i dati del grafo
-     */
-    void clear(){
-        delete[] _vertici;
-        for (int i=0; i < n_vert; ++i){
-            delete[] _archi[i];
-        }
-        delete[] _archi;
-    }
-    
-    /**
      * Richiama la funzione clear() per eliminare le strutture del grafo
      * @short Distruttore
      */
@@ -336,7 +348,7 @@ public:
      * @return true se e' vuoto
      * @return false se arco non e' vuoto
      */
-    bool empty(){
+    bool empty() const{
         return n_vert == 0;
     }
 
@@ -347,7 +359,7 @@ class const_iterator {
 		typedef std::forward_iterator_tag iterator_category;
 		typedef T                         value_type;
 		typedef ptrdiff_t                 difference_type;
-		typedef const T*                  pointer; //a parte questi 2 const è identica a quella sopra
+		typedef const T*                  pointer; 
 		typedef const T&                  reference;
 
 	
