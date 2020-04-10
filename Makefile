@@ -1,12 +1,12 @@
 
-main.exe:  main.o grafoexception.o
-	g++ main.o grafoexception.o -o main.exe
+main.exe:  main.o sortedexception.o
+	g++ main.o sortedexception.o -o main.exe
 
-main.o: main.cpp grafo.h
+main.o: main.cpp sortedArray.h
 	g++ -c main.cpp -o main.o
 
-grafoexception.o: grafoexception.cpp
-	g++ -c grafoexception.cpp -o grafoexception.o
+sortedexception.o: sortedException.cpp
+	g++ -c sortedException.cpp -o sortedexception.o
 
 clean:
 	rm *.o *.exe

@@ -1,5 +1,2 @@
-# Project C++
-
-Piccolo progetto di C++ per modellare un grafo
-
-Esame di Programmazione ed amministrazione di sistema 2019
+# ProjectC++
+Progetto d'esame di c++ sulla creazione di una struttura dati *Sorted Array*

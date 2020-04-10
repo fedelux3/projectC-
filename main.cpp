@@ -1,285 +1,285 @@
-#include <iostream>
-#include "grafo.h"
-#include <string>
+#include <iostream> 
 #include <assert.h>
+#include "sortedArray.h"
 
-//tipo custom point
-struct point {
-    int _x;
-    double _y;
+struct equals_int {
 
-    point(): _x(0), _y(0) {}
+   bool operator()(const int &a, const int &b) const{
+      return a == b;
+   }
+};
+struct compare_int {
 
-    point(int x, double y): _x(x), _y(y) {}
+   bool operator()(const int &a, const int &b) const{
+      return a < b;
+   }
+};
+struct functor_int {
 
-    bool operator==(const point &other) const{
-        if (this->_x == other._x && this->_y == other._y)
-            return true;
-        else
-            return false;
-    }     
+   bool operator()(const int &a) const{
+      return a < 4;
+   }
 };
 
-//stampa del point
+struct equals_string {
+
+   bool operator()(const std::string &s1, const std::string &s2) const {
+      return (s1.compare(s2) == 0);
+   }
+};
+struct compare_string {
+
+   bool operator()(const std::string &s1, const std::string &s2) const {
+      if (s1.compare(s2) < 0) {
+         return true;
+      } else {
+         return false;
+      }
+   }
+};
+struct functor_string {
+
+   bool operator()(const std::string &a) const{
+      return a.length() >= 4;
+   }
+};
+
+struct point {
+   double _x;
+   int _y;
+
+   point(): _x(0), _y(0) {}
+
+   point(double x, int y): _x(x), _y(y) {} 
+};
+struct equals_point {
+
+   bool operator()(const point &p1, const point &p2) const{
+      return (p1._x == p2._x && p1._y == p2._y);
+   }
+};
+struct compare_point {
+
+   bool operator()(const point &p1, const point &p2) const {
+      if (p1._x == p2._x) 
+         return (p1._y <= p2._y);
+      return (p1._x < p2._x);
+
+   }
+};
+struct functor_point {
+   //se il punto si trova nel primo quadrante
+   bool operator()(const point &p) const {
+      return (p._x > 0 && p._y > 0);
+   }
+};
+//stampa point
 std::ostream &operator<<(std::ostream &os, const point &p) {
-
-    os << "x: " << p._x << ", y: " << p._y;
-
+    os << "(" << p._x << "," << p._y << ")";
     return os;
 }
 
-//test iteratore
-template <typename T>
-void testIterator(const grafo<T> &graph){
-    typename grafo<T>::const_iterator i, ie;
-    
-    for (i=graph.begin(), ie =graph.end(); i!=ie; ++i) {
-        std::cout << *i <<std::endl;
-    }
-}
+void testInsert() {
+   typedef sortedArray<int,compare_int, equals_int> sortedArrInt;
 
-void testCreate() {
-    
-    typedef grafo<int> grafo_type;
-    grafo_type g;
+   sortedArrInt a;
 
-    g.insertNodo(0);
-    g.insertNodo(1);
-    g.insertNodo(2);
-    g.insertNodo(7);
-    try {
-    g.insertNodo(7);
-    }
-    catch(nodeDuplicateException &e){}
+   a.insertElem(5);
+   a.insertElem(1);
+   a.insertElem(6);
+   
+   std::cout << a << std::endl;
+   
+   a.insertElem(2);
+   a.insertElem(4);
+   a.insertElem(4);
+   a.insertElem(6);
 
-    g.insertNodo(9);
-    
-    
-    std::cout << g << std::endl;
-    
-    //std::cout << g.get_arco(2,3) << std::endl;
+   std::cout << "stampa random_access" << std::endl;
+   std::cout << a << std::endl;
+
+   assert(a.exist(1));
+   assert(a.exist(4));
+   assert(!a.exist(3));
+
+   //testo iteratore random_access
+   typename sortedArrInt::const_iterator i, ie;
+   i = a.begin();
+   ie = a.end();
+   
+   assert(i[1]==2);
+   assert(i[3]==4);
+   i-=1;
+   ie-=1;
+   std::cout << "stampa inversa da iteratore random_access" << std::endl;
+   for (; i!=ie; --ie) {
+      std::cout << ie[0] << " ";
+   }
+   i = a.begin();
+   ie = a.end();
+
+   assert(*(i+1) == 2);
+   assert(*(i+=1) == 2);
+   assert(*(i+1) == 4);
+   
+   std::cout << std::endl;
+   
+   typename sortedArrInt::reverse_iterator ir, ire;
+   ir = a.begin_r();
+   ire = a.end_r();
+   
+   
+   std::cout << "stampa inversa da iteratore reverse" << std::endl;
+   for (; ir!=ire; ++ir) {
+      std::cout << *ir << " ";
+   }
+   std::cout << std::endl;
+
+   //test functor custom
+   sortedArrInt sa = a.functor(functor_int());
+   std::cout << "applico funtore \" < 4 \"" << std::endl;
+   std::cout << sa << std::endl;
 }
 
 void testDelete() {
+   typedef sortedArray<std::string, compare_string, equals_string> sortedArrString;
 
-    typedef grafo<int> grafo_type;
-    grafo_type g;
+   sortedArrString a;
 
-    g.insertNodo(23);
-    g.insertNodo(42);
+   a.insertElem("a");
+   a.insertElem("ab");
+   a.insertElem("abc");
+   a.insertElem("zeta");
+   
+   std::cout << a << std::endl;
+   
+   a.insertElem("ciao");
+   a.insertElem("ba");
+   a.insertElem("ab");
+   a.insertElem("acb");
+   a.insertElem("zorro");
 
-    std::cout << "prima" << std::endl;
-    std::cout << g << std::endl;
+   std::cout << "stampa random_access" << std::endl;
+   std::cout << a << std::endl;
 
-    g.deleteNodo(23);
+   a.deleteElem("ab");
+   std::cout << "eliminato \"ab\"" << std::endl;
+   std::cout << a << std::endl;
+   a.deleteElem("zeta");
+   std::cout << "eliminato \"zeta\"" << std::endl;
+   std::cout << a << std::endl;
 
-    std::cout << "dopo1" << std::endl;
-    std::cout << g << std::endl;
+   sortedArrString b = a;
+   std::cout << "fisso b" << std::endl;
 
-    g.insertNodo(57);
+   a.insertElem("abba");
+   a.deleteElem("zorro");
+   a.insertElem("sa");
+   a.insertElem("aldo");
+   a.deleteElem("a");
+   std::cout << a << std::endl;
+   try {
+      a.deleteElem("a");
+   } catch (elemNotFoundException e) {
+      std::cout << "elemNotFoundException found" << std::endl;
+   }
 
-    std::cout << "dopo2" << std::endl;
-    std::cout << g << std::endl;
+   sortedArrString c(a);
+   std::cout << "fisso c" << std::endl;
+   
+   std::cout << "svuoto a" << std::endl;
+   a.clear();
+   std::cout << "a: " << a << std::endl;
+   try {
+      a.deleteElem("a");
+   } catch (emptyException e) {
+      std::cout << "emptyException found" << std::endl;
+   }
+   std::cout << "b: " << b << std::endl;
+   std::cout << "c: " << c << std::endl;
 
-    g.deleteNodo(42);
-    try{
-        g.deleteNodo(42);
-    } catch (nodeNotFoundException &e) {}
+   //testo costruttore secondario
+   sortedArrString::reverse_iterator ib, ibe;
+   ib = b.begin_r();
+   ibe = b.end_r();
 
-    std::cout << "dopo3" << std::endl;
-    std::cout << g << std::endl;
-
-    g.deleteNodo(57);
-    
-    std::cout << "dopo5" << std::endl;
-    std::cout << g << std::endl;
-    try{
-    g.deleteNodo(42);
-    } catch (emptyException &e) {}
-    // GESTIRE CASO DEL GRAFO VUOTO E DELETE SBAGLIATE
-}
-
-void testArchi() {
-    typedef grafo<int> grafo_type;
-    grafo_type g;
-
-    g.insertNodo(2);
-    g.insertNodo(51);
-    g.insertNodo(83);
-    std::cout << g << std::endl;
-    
-    g.insertArco(51,2);
-    g.insertArco(2,2);
-    g.insertArco(2,51);
-    try{
-    g.insertArco(51,2);
-    } catch (edgeException &e) {}
-    try {
-    g.insertArco(3,5);
-    } catch (nodeNotFoundException &e){}
-    std::cout << g << std::endl;
-
-
-    g.deleteArco(51,2);
-    try {
-    g.deleteArco(2,83);
-    } catch (edgeNotFoundException &e){}
-    g.deleteArco(2,2);
-    std::cout << g << std::endl;
-
-    g.insertNodo(42);
-    g.insertNodo(13);
-    g.insertArco(42,13);
-    g.insertArco(2,13);
-    std::cout << g << std::endl;
-
-    g.insertArco(51,83);
-    g.insertArco(13,42);
-    std::cout << g << std::endl;
-
-    g.deleteNodo(2);
-    std::cout << g << std::endl;
-    
-}
-
-void testTipi() {
-    typedef grafo<std::string> grafo_type;
-    grafo_type g;
-
-    g.insertNodo("primo");
-    g.insertNodo("secondo");
-    g.insertNodo("terzo");
-    g.insertArco("primo", "secondo");
-    g.insertArco("secondo", "secondo");
-    g.insertArco("terzo", "primo");
-    std::cout << g << std::endl;
-
-    std::cout << "test iteratore " << std::endl;
-    testIterator(g);
-    std::cout << "test stampa" << std::endl;
-    std::cout << g << std::endl;
-
-    assert(g.exists("primo"));
-    assert(g.hasEdge("primo", "secondo"));  
-
-    grafo_type g2(g);
-
-    grafo_type g3 = g2;
-
-    std::cout << g2 << std::endl;
-
-    g2.insertArco("primo", "primo");
-    std::cout << "g:" << std::endl;
-    std::cout << g << std::endl;
-    std::cout << "g2:" << std::endl;
-    std::cout << g2 << std::endl;
-
-    std::cout << "g3" << std::endl;
-    std::cout << g3 << std::endl;
-}
-
-void testVario() {
-    typedef grafo<double> g_type;
-    g_type g;
-
-    g.insertNodo(4.3);
-    g.insertNodo(53);
-    g.insertNodo(4+3.5);
-    
-    std::cout << g << std::endl;
-
-    g.insertArco(53,4.3);
-    g.insertArco(4.3,4.3);
-    g.insertArco(53,7.5);
-    g.insertArco(7.5,4.3);
-    g.insertArco(4.3,53);
-    try {
-    g.insertArco(4.3,53); //gia` inserito
-    } catch (edgeException &e) {}
-
-    std::cout << g << std::endl;
-
-    try {
-    g.deleteArco(7.5,7.5); //non esiste
-    } catch (edgeNotFoundException &e) {}
-    g.deleteArco(53,4.3);
-    try {
-    g.deleteArco(4.3,54); //non esiste nodo
-    } catch (nodeNotFoundException &e) {}
-    std::cout << g << std::endl;
-
-    //copy constructor
-    g_type g2(g);
-    g_type g3 = g;
-    g2.insertNodo(23.43);
-    g2.insertArco(7.5, 23.43);
-    std::cout << "g" << std::endl;
-    std::cout << g << std::endl;
-    
-    std::cout << "g2" << std::endl;
-    std::cout << g2 << std::endl;
-
-    g3.insertNodo(13.42);
-    g3.insertArco(13.42,4.3);
-    g3.insertArco(13.42,13.42);
-
-    std::cout << "g3" << std::endl;
-    std::cout << g3 << std::endl;
+   std::cout << "costruttore secondario:" << std::endl;
+   sortedArrString d(ib, ibe);
+   std::cout << "d (=b): " << d << std::endl;
+   d.insertElem("fitz");
+   std::cout << "d: " << d << std::endl;
+   
+   //testo funtore esterno
+   sortedArrString f = d.functor(functor_string());
+   std::cout << "testo futore string \" lengh() >= 4 \"" << std::endl;
+   std::cout << f << std::endl;
 }
 
 void testCustom() {
-    point p(5,3.4);
-    point p2(5,3.4);
-    std::cout << p << std::endl;
-    bool b;
-    b = p == p2;
-    std::cout<<b << std::endl;
-    
-    typedef grafo<point> grafo_type;
-    grafo_type g;
+   point p1 = point(3.4,2);
+   point p2 = point(-3.4,1);
+   point p3 = point(7.0,-5);
+   point p4 = point(2,2);
+   point p5 = point(-1.5,7);
+   
+   typedef sortedArray<point, compare_point, equals_point> sortedArrPoint;
 
-    g.insertNodo(p);
-    try{
-        g.insertNodo(p2);
-    } catch (nodeDuplicateException &e) {
-        std::cout << "duplicate exception" << std::endl;
-    }
-    g.insertNodo(point(6,8));
-    g.insertNodo(point(2,12.2));
-    
-    g.insertArco(p,point(6,8));
-    g.insertArco(point(6,8),p);
-    g.insertArco(point(2,12.2),point(2,12.2));
-    std::cout << g << std::endl;
+   sortedArrPoint a;
 
-    g.deleteArco(p,point(6,8));
-    g.deleteNodo(point(2,12.2));
-    std::cout << g << std::endl;
+   a.insertElem(p1);
+   a.insertElem(p2);
+   a.insertElem(p3);
+   a.insertElem(p4);
+   a.insertElem(p5);
+   a.insertElem(p1);
+   a.insertElem(point(2,3));
 
-    grafo_type g2(g);
+   std::cout << "a: " << a << std::endl;
 
-    point p3(3,7.2);
-    g2.insertNodo(p3);
-    g2.insertArco(p, p3);
-    g2.insertArco(p3, p3);
-    
-    std::cout << "g\n" << g << std::endl;
-    std::cout << "g2\n" << g2 << std::endl;
+   a.deleteElem(p1);
+   a.deleteElem(p3);
+   a.insertElem(point(1,1));
+   a.insertElem(point(1,1));
+
+   sortedArrPoint::const_iterator i, ie; 
+   i = a.begin();
+   ie = a.end();
+   
+
+   std::cout << "a: " << a << std::endl;  
+
+   sortedArrPoint b = a;
+   sortedArrPoint c = b.functor(functor_point());
+   
+   std::cout << "b: " << b << std::endl;
+
+   std::cout << "c generato applicando funtor in b - solo primo quadrante" << std::endl;
+   std::cout << "c: " << c << std::endl;
+
+   b.insertElem(point());
+
+   std::cout << "b: " << b << std::endl;
+
+   std::cout << "stampa tramite reverse iterator" << std::endl << "b: ";
+   sortedArrPoint::reverse_iterator ir, ier;
+   ir = b.begin_r();
+   ier = b.end_r();
+   
+   for (; ir != ier; ++ir)
+      std::cout << *ir << " ";
+   std::cout << std::endl;
+
+
 }
 
-int main() {
-
-    std::cout<< " - - - Test Create - - - \n" << std::endl;
-    testCreate();
-    std::cout<< " - - - Test Delete - - - \n" << std::endl;
-    testDelete();
-    std::cout<< " - - - Test Archi - - - \n" << std::endl;
-    testArchi();
-    std::cout<< " - - - Test Tipi - - - \n" << std::endl;
-    testTipi();
-    std::cout<< " - - - Test Vario - - - \n" << std::endl;
-    testVario();
-    std::cout<< " - - - Test Custom - - - \n" << std::endl;
-    testCustom();
-    return 0;
+int main(){
+   std::cout << "*** Test Insert ***" << std::endl;
+   testInsert();
+   std::cout << std::endl;
+   std::cout << "*** Test Delete ***" << std::endl;
+   testDelete();
+   std::cout << std::endl;
+   std::cout << "*** Test Custom ***" << std::endl;
+   testCustom();
+return 0;
 }

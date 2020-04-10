@@ -1,14 +1,14 @@
 #-------------------------------------------------
 #
-# Project created by QtCreator 2019-04-11T10:55:31
+# Project created by QtCreator 2019-05-28T15:18:11
 #
 #-------------------------------------------------
 
-QT       += core gui
+QT       += core gui charts
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
-TARGET = projectQT
+TARGET = Qt
 TEMPLATE = app
 
 # The following define makes your compiler emit warnings if you use
@@ -26,15 +26,17 @@ CONFIG += c++11
 
 SOURCES += \
         main.cpp \
-    projectQt.cpp
+        mainwindow.cpp
 
 HEADERS += \
-    projectQt.h
+        mainwindow.h
 
 FORMS += \
-    projectQt.ui
+        mainwindow.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
+
+DISTFILES +=
